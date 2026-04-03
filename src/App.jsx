@@ -271,10 +271,9 @@ function ContextFetch({ ticket, onDone }) {
   }, []);
 
   const items = [
-    { label: "Fetching KB articles…", done: phase > 1 },
+    { label: "Fetching SOP articles…", done: phase > 1 },
     { label: "Loading SOPs & runbooks…", done: phase > 2 },
-    { label: "Querying historical incidents…", done: phase > 3 },
-    { label: "Pulling monitoring links…", done: phase > 4 },
+    { label: "Matching relevant knowledge base articles…", done: phase > 3 },
   ];
 
   return (
@@ -316,7 +315,7 @@ function ContextFetch({ ticket, onDone }) {
       )}
       {phase >= 5 && (
         <button onClick={onDone} style={{ background: "#4361ee", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14, marginTop: 8 }}>
-          Run LLM Analysis →
+          Run LLM →
         </button>
       )}
     </div>
@@ -582,7 +581,7 @@ Ticket ${ticket.id}: auto-updated → RESOLVED`}
           <div style={{ display: "flex", gap: 12 }}>
             <div style={{ flex: 1, background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 14, fontSize: 13 }}>
               <div style={{ color: "#666", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>Audit Log</div>
-              <div style={{ color: "#00d68f" }}>✓ Written to S3</div>
+              <div style={{ color: "#00d68f" }}>✓ Written to Localhost</div>
             </div>
             <div style={{ flex: 1, background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 14, fontSize: 13 }}>
               <div style={{ color: "#666", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>Ticket</div>
@@ -590,7 +589,9 @@ Ticket ${ticket.id}: auto-updated → RESOLVED`}
             </div>
             <div style={{ flex: 1, background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 14, fontSize: 13 }}>
               <div style={{ color: "#666", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>KB Feedback</div>
-              <div style={{ color: "#00d68f" }}>✓ Learned</div>
+              
+             {/* <div style={{ color: "#00d68f" }}>✓ Learned</div> */}
+              
             </div>
           </div>
           <button onClick={onDone} style={{ marginTop: 20, background: "#4361ee", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>← Back to Queue</button>
@@ -619,14 +620,14 @@ export default function App() {
       <div style={{ background: "#0a0a14", borderBottom: "1px solid #1e1e2e", padding: "0 32px", display: "flex", alignItems: "center", height: 56, gap: 24 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 28, height: 28, background: "#4361ee", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>⚡</div>
-          <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>RemediateAI</span>
-          <span style={{ fontSize: 11, color: "#4361ee", background: "#4361ee22", padding: "2px 8px", borderRadius: 20, fontWeight: 700 }}>MVP</span>
+          <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>HITL-Incidents-Triage</span>
+          <span style={{ fontSize: 11, color: "#4361ee", background: "#4361ee22", padding: "2px 8px", borderRadius: 20, fontWeight: 700 }}>POC</span>
         </div>
         <div style={{ flex: 1 }} />
         <div style={{ display: "flex", gap: 24, fontSize: 13, color: "#555" }}>
           <span style={{ color: "#a0b4ff" }}>HITL Platform</span>
           <span>Audit Logs</span>
-          <span>KB Manager</span>
+          <span>SOP Manager</span>
         </div>
         <div style={{ width: 32, height: 32, background: "#4361ee44", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "#a0b4ff", fontWeight: 700 }}>L1</div>
       </div>
