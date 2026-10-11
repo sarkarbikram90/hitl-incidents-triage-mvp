@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "npx serve .",
-    "build": "node -e \"console.log('Single-file static frontend ready at root index.html')\"",
-    "preview": "npx serve ."
+    "start": "npx serve dist",
+    "build": "node build.js",
+    "preview": "npx serve dist"
   }
 }
