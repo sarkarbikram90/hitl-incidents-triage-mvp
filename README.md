@@ -1,27 +1,42 @@
-# HITL Incident Triage — redesigned demo prototype
+# HITL Incident Triage — Enterprise AI Security Operations Center
 
-A responsive, single-file frontend for demonstrating an evidence-backed, human-in-the-loop IT incident triage workflow in the Ajaia IT Manager assessment.
+A responsive, single-file frontend demonstrating an evidence-backed, human-in-the-loop (HITL) IT incident triage workflow for the **Ajaia IT Manager & AI Consultant Assessment**.
 
 ---
 
-## 📋 What it demonstrates
+## 🌟 Executive Summary & Consultant Architecture
 
-- **Incident queue with priority and approval filters, search, and case selection**: Filter by severity (P1–P4), approval status (Pending Review, Approved, Changes Requested, Rejected), or scenario category. Includes real-time keyword search and responsive card views.
-- **AI triage summary separated from source evidence and analyst judgment**: Clean three-tier separation of concerns:
-  1. **AI Triage Synthesis & Recommendations**: Confidence score, executive situation briefing, probable root cause, blast radius estimation, actionable command proposals with risk ratings (`SAFE`, `NEEDS APPROVAL`, `HIGH RISK`), and safety rollback plans.
-  2. **Source Ground Truth Evidence**: Immutable raw telemetry artifacts (git diffs, Tor egress network telemetry, Google Workspace DLP audit trails, OAuth token consent payloads, HRIS vs. SCIM identity logs) with cryptographic hash verification and copy tools.
-  3. **Human Analyst Judgment & Approval Gate**: Explicit human gatekeeper with mandatory pre-flight attestation checklists, editable remediation scripts, customizable analyst notes, and tactile decision dispatching (`Approve & Dispatch`, `Request Changes`, `Reject Case`).
-- **Human approval / request-changes / reject controls with a local demo audit trail**: Real-time simulation of remediation dispatch with live step-by-step console simulation and persistent audit logging.
-- **Evidence view, timeline, synthetic incident export, and local ticket intake**:
-  - **Timeline**: Chronological history tracking detection, AI evaluation, and analyst interventions.
-  - **Local Ticket Intake**: Form with pre-populated scenario presets to inject custom synthetic incident tickets on the fly.
-  - **Export JSON**: One-click download of a full incident package including all case states and local audit trails.
-- **Clear warning that no live system, credential, permission, or ticketing action is connected**: Prominent top disclaimer banner and an in-app "System Limitations & Production Blueprint" modal detailing architectural requirements for production SOC environments.
-- **Synthetic scenario examples** tailored directly to IT & security management:
-  1. **Exposed API Credentials** (`INC-8041`): Production OpenAI API key leaked in a public GitHub repository, with active Tor exit node egress scraping detected.
-  2. **Broad Sharing Permissions** (`INC-8042`): Confidential HR payroll and equity Google Sheet changed to "Anyone with the link can view", with anonymous external downloads recorded.
-  3. **Unapproved AI Integrations** (`INC-8043`): Shadow AI Chrome extension granted unrestricted read access to executive Google Workspace mail and calendars.
-  4. **Onboarding / Offboarding Gaps** (`INC-8044`): Terminated contractor retaining active Okta and AWS Production Console SSO access 7 days post-contract.
+Built from the ground up to reflect **Enterprise AI Consulting & Strategic SOC Advisory Standards**, this prototype illustrates how modern organizations deploy autonomous AI reasoning while guaranteeing strict human accountability, zero-trust attestation, and regulatory defensibility.
+
+### Key Capabilities Demonstrated
+
+1. **Clean Three-Tier Separation of Concerns**:
+   - **Tier 1: Deterministic AI Triage Synthesis**: Context-weighted model recommendations, confidence factor decomposition (signal correlation, blast radius certainty, rollback safety), actionable remediation commands with risk categorizations (`SAFE`, `NEEDS APPROVAL`, `HIGH RISK`), and safety rollbacks.
+   - **Tier 2: Immutable Telemetry Ground Truth**: Cryptographically verified raw evidence artifacts (`SHA-256` integrity) spanning git patches, Tor egress network telemetry, Google Workspace DLP logs, OAuth consent grants, and HRIS vs. SCIM identity records.
+   - **Tier 3: Human Analyst Gatekeeper**: Mandatory pre-flight attestation checklists, editable script overrides, customizable audit notes, and tactile execution dispatching (`Approve & Dispatch`, `Request Changes`, `Reject Case`).
+
+2. **Explainable AI (XAI) & Chain-of-Thought (CoT) Inspector**:
+   - Deep-dive drawer revealing model inference parameters (temperature: `0.15`, deterministic profile), step-by-step reasoning tokens, NeMo / LlamaGuard hallucination filters, and Presidio PII scrubbing attestation.
+
+3. **Multi-Persona Executive Perspective Switcher**:
+   - **L2 Security Specialist (Technical Lens)**: Deep-dive CLI scripts, reverse-proxy fallbacks, and command-line orchestration.
+   - **CISO Executive Lens**: Highlights material business risk, SEC 4-day Item 1.05 disclosure timelines, financial blast radius estimates, and regulatory SLA requirements.
+   - **AI Governance & Auditor Lens**: Focuses on token entropy, model calibration, SOC2 CC6.8 access evidence, and prompt injection defense.
+
+4. **Split Command Center & View Modes**:
+   - Switch between clean **Tabbed View** and a high-density **3-Pane Live Command Center** to evaluate AI output, raw telemetry, and human judgment side-by-side.
+
+5. **Live Simulated Telemetry Streaming**:
+   - Interactive **"Simulate Live Threat Stream"** button that injects a high-priority incident (`INC-8045` Database Mass Egress) in real time with dynamic triage synthesis.
+
+6. **Power Keyboard Shortcuts**:
+   - `J` / `K` queue navigation, `Enter` case selection, `1` / `2` / `3` pane switching, `A` approve, `R` request changes, `X` reject, and `?` hotkey reference.
+
+7. **Synthetic Scenarios Tailored to IT & Security Governance**:
+   - **INC-8041: Exposed API Credentials**: Production OpenAI key leaked in public GitHub repository with active Tor scraping.
+   - **INC-8042: Broad Sharing Permissions**: Confidential payroll and equity sheet shared publicly with anonymous downloads.
+   - **INC-8043: Unapproved AI Integrations**: Shadow AI Chrome extension granted unrestricted read access to executive mail and calendars.
+   - **INC-8044: Onboarding / Offboarding Gaps**: Terminated contractor retaining active Okta and AWS Production Console SSO access 7 days post-contract.
 
 ---
 
@@ -30,7 +45,6 @@ A responsive, single-file frontend for demonstrating an evidence-backed, human-i
 Open `index.html` in any modern web browser (Chrome, Safari, Edge, Firefox).
 
 ```bash
-# You can double click index.html or open via command line:
 # Windows:
 start index.html
 
@@ -45,36 +59,27 @@ xdg-open index.html
 
 ---
 
-## 🌐 Deploy as a static Vercel site
+## 🌐 Deploy as a Static Site (Vercel)
 
-1. Create a new GitHub repository, or create a branch in the existing repository after backing up the current version.
-2. Ensure `index.html` is at the repository root. `README.md` and `vercel.json` are included.
-3. Import that repository into Vercel as a **static site**:
-   - **Framework Preset**: `Other`
-   - **Build Command**: Leave empty / None (or default)
-   - **Output Directory**: Root directory (`.`)
-4. Test the deployment in an incognito browser and verify mobile layout, filters, approval events, export, and ticket intake.
-5. Only point your assessment link at this deployment after checking it yourself.
+1. Import the repository into Vercel.
+2. Vercel automatically runs `node build.js` (defined in `package.json`), which populates the `dist/` directory specified in `vercel.json`.
+3. The site is served with clean URLs, zero external CDN dependencies, and instant global caching.
 
 ---
 
-## 🔒 Important limitations
+## 🔒 Important Limitations & Production Architecture Blueprint
 
-> **This is an interaction prototype, not a production security system.**
-> All incidents and AI assessments are sample data; approval events stay in browser memory (`localStorage`) and exports are local JSON files. It has no backend, authentication, authorization, real model call, SIEM/ITSM/IdP integration, server-side audit store, or tool execution. Do not enter real client data, PHI, education records, credentials, or confidential information.
+> **Interaction Prototype Notice:** All incidents, telemetry, and AI assessments are synthetic simulations. Actions persist in local browser storage (`localStorage`). No live systems, credentials, or ticketing APIs are connected.
 
-### Production Implementation Blueprint
+### Enterprise Production Checklist (AI Advisory)
 
-For a production deployment in an enterprise IT environment, implement:
-
-1. **Server-Side Identity & RBAC**: SAML 2.0 / OIDC single sign-on with multi-factor authentication, enforcing strict role-based access control (L1 Triager vs. L2 Security Analyst vs. SecOps Admin).
-2. **Durable Tamper-Evident Audit Logs**: Cryptographically chained, write-once-read-many (WORM) storage (such as AWS S3 Glacier with Object Lock) with forwarding to enterprise SIEM platforms (Splunk, Datadog, Microsoft Sentinel).
-3. **Automated Secret & PII Redaction Pipeline**: Server-side regex and NER filtering to scrub API tokens, private keys, passwords, SSNs, credit cards, and HIPAA/FERPA protected data before context is ingested by any LLM.
-4. **Least-Privilege Scoped Connectors**: Scoped service principles with tight IAM boundary conditions rather than broad admin credentials for cloud providers, Okta, Google Workspace, and Jira Service Management.
-5. **Idempotent Actions & Automated Rollbacks**: Two-phase dry-run commit protocols with health-check monitoring and automatic rollback execution if downstream service degradation occurs.
-6. **Continuous Security Auditing**: Independent penetration testing, regular threat modeling, and client-side authorization bypass prevention.
+1. **Identity & Multi-Party Attestation**: OIDC/SAML2 SSO with four-eyes approval gates for destructive production actions.
+2. **Durable Tamper-Evident Audit Vault**: Cryptographically chained WORM storage (AWS S3 Glacier Object Lock) streaming to enterprise SIEM platforms.
+3. **Automated Secret & PII Sanitization**: Pre-inference NER pipelines redacting tokens, keys, passwords, and sensitive client data.
+4. **Least-Privilege Scoped Connectors**: Scoped service principles enforcing strict boundary conditions across cloud and identity providers.
+5. **Idempotent Two-Phase Execution**: Dry-run validations coupled with automated circuit-breaker rollbacks upon health check degradation.
+6. **Continuous Adversarial Red-Teaming**: Automated evaluation suites testing against jailbreaks, prompt leakage, and model drift.
 
 ---
 
-*Ajaia IT Manager Assessment — Verified & Deployed October 2026*
-
+*Ajaia IT Manager & AI Consultant Assessment — Verified & Deployed October 2026*
