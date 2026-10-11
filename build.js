@@ -1,3 +1,7 @@
+/**
+ * Build script for Ajaia HITL Incident Triage Prototype
+ * Generates dist/ output directory for static hosting and Vercel deployments.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 

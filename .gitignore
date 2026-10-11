@@ -1,3 +1,6 @@
+# Ajaia HITL Incident Triage Prototype
+# Build, dependency, and local environment ignores
+
 # Logs
 logs
 *.log
@@ -7,12 +10,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and build outputs
 node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Editor directories and system files
 .vscode/*
 !.vscode/extensions.json
 .idea

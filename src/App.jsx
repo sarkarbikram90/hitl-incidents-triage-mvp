@@ -1,682 +1,407 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
-// ─── Mock Data ──────────────────────────────────────────────────────────────
-const MOCK_KB = [
-  { id: "KB-001", title: "Redis OOM Recovery Runbook", tags: ["redis", "memory", "oom"] },
-  { id: "KB-002", title: "Kubernetes Pod CrashLoop Resolution", tags: ["k8s", "pod", "crash"] },
-  { id: "KB-003", title: "PostgreSQL Connection Pool Exhaustion", tags: ["postgres", "db", "connections"] },
-  { id: "KB-004", title: "High CPU Node Remediation SOP", tags: ["cpu", "node", "performance"] },
-];
-
-const MOCK_PAST = [
-  { id: "INC-2841", similarity: 94, resolution: "Flushed Redis memory + increased maxmemory to 4GB", date: "2024-12-10" },
-  { id: "INC-2799", similarity: 78, resolution: "Restarted pod with updated resource limits", date: "2024-12-03" },
-];
-
-const MOCK_TICKETS = [
+// Initial synthetic scenarios for Ajaia IT Manager Assessment
+const INITIAL_INCIDENTS = [
   {
-    id: "INC-2991",
-    title: "Redis OOM – prod-cache-01 unresponsive",
+    id: "INC-8041",
+    title: "Production OpenAI API Key Leaked in Public GitHub Repository",
     severity: "P1",
-    env: "production",
-    app: "checkout-service",
-    host: "prod-cache-01",
-    description: "Redis instance prod-cache-01 is throwing OOM errors. Checkout service returning 503s. Cache hit rate dropped from 94% to 12% in last 20 mins.",
-    logs: `[ERROR] 2025-02-22 09:41:03 redis-server: Can't save in background: fork: Out of memory
-[WARN]  2025-02-22 09:41:10 checkout-service: Redis connection timeout after 5000ms
-[ERROR] 2025-02-22 09:41:11 checkout-service: Circuit breaker OPEN – upstream=redis
-[CRIT]  2025-02-22 09:41:15 redis-server: OOM command not allowed (used_memory > maxmemory)`,
-    tags: ["redis", "memory", "oom"],
-  },
-  {
-    id: "INC-2992",
-    title: "K8s pod CrashLoopBackOff – api-gateway",
-    severity: "P2",
-    env: "staging",
-    app: "api-gateway",
-    host: "k8s-node-04",
-    description: "api-gateway pod entering CrashLoopBackOff. Backoff delay reaching 5m. Deployment rollout from 30min ago likely culprit.",
-    logs: `[ERROR] 2025-02-22 10:12:44 api-gateway: panic: runtime error: invalid memory address
-[ERROR] 2025-02-22 10:12:44 goroutine 1 [running]: main.main()
-[INFO]  2025-02-22 10:12:45 kubelet: Back-off restarting failed container
-[WARN]  2025-02-22 10:17:01 kubelet: container "api-gateway" in pod is waiting to start: CrashLoopBackOff`,
-    tags: ["k8s", "pod", "crash"],
-  },
-  {
-    id: "INC-2993",
-    title: "PostgreSQL connection pool exhausted – user-svc",
-    severity: "P2",
-    env: "production",
-    app: "user-service",
-    host: "db-primary-03",
-    description: "PgBouncer pool exhausted. Max connections (100) reached. New queries queuing. User login and profile endpoints timing out.",
-    logs: `[ERROR] 2025-02-22 11:03:22 pgbouncer: no more connections allowed (max_client_conn=100)
-[WARN]  2025-02-22 11:03:23 user-service: Acquiring connection exceeded 30s timeout
-[ERROR] 2025-02-22 11:03:25 user-service: DB query failed after 3 retries`,
-    tags: ["postgres", "db", "connections"],
-  },
-];
-
-const LLM_ANALYSIS = {
-  "INC-2991": {
-    summary: "Redis instance prod-cache-01 has exhausted its memory allocation, triggering OOM kill protection. The checkout service has lost all cache connectivity, causing a 503 cascade. Memory grew 340% in 6 hours, suggesting a keyspace leak or TTL misconfiguration.",
-    rootCause: "Redis maxmemory limit (2GB) reached. allkeys-lru eviction policy not kicking in, likely due to memory fragmentation ratio > 2.0. Probable cause: TTL not set on session keys inserted by new feature deployment 3h ago.",
-    components: ["prod-cache-01 (Redis 7.0)", "checkout-service (3 pods)", "payment-processor (downstream)"],
-    confidence: 91,
-    recommendation: {
-      steps: [
-        "Run MEMORY DOCTOR on Redis to confirm fragmentation",
-        "Execute MEMORY PURGE to reclaim fragmented memory",
-        "Scan and expire session keys without TTL (batch 1000)",
-        "Increase maxmemory to 4GB as temporary headroom",
-        "Restart Redis with SAVE disabled to prevent fork OOM",
+    category: "Exposed API Credentials",
+    source: "GitHub Secret Scanning & GitGuardian Webhook",
+    affectedEntity: "repo: ajaia-org/customer-portal-v2 (David Miller)",
+    created: "2026-10-11T14:32:00Z",
+    approvalStatus: "Pending Review",
+    description: "GitGuardian and GitHub Secret Scanning detected an active OpenAI Enterprise API key committed to public branch feature/support-bot in customer-portal-v2. Exposure window is ~18 minutes. Threat telemetry observed 4,200 token calls from unrecognized Tor exit node IPs.",
+    aiSummary: {
+      model: "Ajaia-SecOps-Triage (v4.2)",
+      confidence: 96,
+      confidenceRationale: "High confidence due to direct cryptographic match against active OpenAI token pattern and concurrent anomalous token billing spikes in SIEM telemetry.",
+      riskLevel: "HIGH RISK",
+      executiveSummary: "Production AI API key with unrestricted billing tier exposed in a publicly accessible GitHub commit. External automated scrapers have already begun issuing programmatic queries. Immediate credential revocation, repo sanitization, and token usage auditing required.",
+      rootCause: "Hardcoded credential committed directly to repository rather than sourcing from AWS Secrets Manager during local developer debugging.",
+      impactScope: [
+        "OpenAI Enterprise Account (Monthly limit: $10,000)",
+        "Repository: ajaia-org/customer-portal-v2",
+        "Downstream Support Bot Microservice",
+        "Compliance: SOC2 CC6.1 (Logical Access Controls)"
+      ],
+      actionPlan: [
+        "Immediately revoke and rotate the exposed API key via OpenAI Organization Admin API.",
+        "Deploy replacement secret to AWS Secrets Manager (/prod/customer-portal/openai-key).",
+        "Run git-filter-repo to purge commit a7f9c2d from git history and force push.",
+        "Query OpenAI usage logs to identify whether proprietary prompt templates or customer data were leaked."
       ],
       commands: [
-        { id: "cmd-1", label: "Check memory fragmentation", cmd: 'redis-cli -h prod-cache-01 INFO memory | grep -E "used_memory|fragmentation"', risk: "safe" },
-        { id: "cmd-2", label: "Purge fragmented memory", cmd: "redis-cli -h prod-cache-01 MEMORY PURGE", risk: "safe" },
-        { id: "cmd-3", label: "Expire TTL-less session keys", cmd: `redis-cli -h prod-cache-01 --scan --pattern "session:*" | xargs -I{} redis-cli -h prod-cache-01 EXPIRE {} 3600`, risk: "needs-approval" },
-        { id: "cmd-4", label: "Increase maxmemory to 4GB", cmd: "redis-cli -h prod-cache-01 CONFIG SET maxmemory 4gb", risk: "needs-approval" },
+        {
+          id: "cmd-8041-1",
+          label: "Audit Recent Token Consumption",
+          cmd: 'curl -s -H "Authorization: Bearer $OPENAI_ADMIN" "https://api.openai.com/v1/organization/usage?date=today"',
+          risk: "SAFE",
+          selected: true,
+          description: "Read-only query to measure token spike and extract caller IP addresses."
+        },
+        {
+          id: "cmd-8041-2",
+          label: "Revoke and Rotate Compromised API Key",
+          cmd: "python3 -m ajaia_sec.creds rotate --provider openai --key-id sk-proj-9mF0x... --env production --auto-update-secrets-manager",
+          risk: "NEEDS APPROVAL",
+          selected: true,
+          description: "Revokes token in OpenAI and writes fresh rotated secret to AWS Secrets Manager."
+        },
+        {
+          id: "cmd-8041-3",
+          label: "Purge Commit from Git Remote History",
+          cmd: "gh repo clone ajaia-org/customer-portal-v2 /tmp/repo && cd /tmp/repo && git filter-repo --invert-paths --path server/config/openai.js && git push origin --force --all",
+          risk: "HIGH RISK",
+          selected: false,
+          description: "Destructive git rewrite to eliminate token string from all public commit objects."
+        }
       ],
-      rollback: "redis-cli -h prod-cache-01 CONFIG SET maxmemory 2gb && redis-cli -h prod-cache-01 CONFIG REWRITE",
-      riskLevel: "needs-approval",
-      dryRunOutput: `DRY RUN SIMULATION (prod-cache-01):
-> INFO memory
-used_memory: 2,147,483,648 (2.00 GB / 100% of limit)
-mem_fragmentation_ratio: 2.34 ⚠️  HIGH
-> MEMORY PURGE → would reclaim ~340MB
-> EXPIRE scan: 48,291 keys without TTL found
-> CONFIG SET maxmemory 4gb → would succeed (kernel limit: 16GB available)
-─────────────────────────────────
-Estimated impact: ✓ Non-destructive  ✓ Reversible  ⚠️ Session keys affected`,
+      rollbackPlan: "In the event of application startup failure after key rotation, activate proxy fallback model cache and revert to previous secret version in Secrets Manager."
     },
-  },
-  "INC-2992": {
-    summary: "api-gateway pod is in CrashLoopBackOff due to a nil pointer dereference in the main goroutine. Timing correlates with the v2.4.1 deployment 30 minutes ago. No previous crash history for this service in the last 60 days.",
-    rootCause: "Go runtime panic on invalid memory address dereference. Likely a missing nil check on a newly introduced config struct field. The staging env config may lack a required field added in v2.4.1.",
-    components: ["api-gateway (pod: api-gateway-7d9f8c-xk2p1)", "k8s-node-04", "ingress-nginx"],
-    confidence: 84,
-    recommendation: {
-      steps: [
-        "Capture full panic stacktrace from pod logs",
-        "Roll back deployment to v2.4.0",
-        "Verify staging configmap has required new fields",
-        "Redeploy v2.4.1 after config patch",
-      ],
-      commands: [
-        { id: "cmd-1", label: "Get full crash stacktrace", cmd: "kubectl logs api-gateway-7d9f8c-xk2p1 --previous -n staging | tail -50", risk: "safe" },
-        { id: "cmd-2", label: "Rollback deployment to v2.4.0", cmd: "kubectl rollout undo deployment/api-gateway -n staging", risk: "needs-approval" },
-        { id: "cmd-3", label: "Verify rollout status", cmd: "kubectl rollout status deployment/api-gateway -n staging --timeout=120s", risk: "safe" },
-      ],
-      rollback: "kubectl rollout undo deployment/api-gateway -n staging (already is rollback)",
-      riskLevel: "needs-approval",
-      dryRunOutput: `DRY RUN SIMULATION (k8s-node-04 / staging):
-> kubectl rollout undo deployment/api-gateway
-  Current: v2.4.1 (image: gcr.io/co/api-gateway:v2.4.1)
-  Target:  v2.4.0 (image: gcr.io/co/api-gateway:v2.4.0)
-  Pods affected: 2 replicas
-  Estimated downtime: ~45s rolling restart
-> kubectl rollout status → would reach "successfully rolled out"
-─────────────────────────────────
-Estimated impact: ✓ Staging only  ✓ Reversible  ✓ No data loss`,
-    },
-  },
-  "INC-2993": {
-    summary: "PgBouncer connection pool is fully saturated at 100 max connections. Connection usage spiked from 40 to 100 over 8 minutes. User-service has 12 pods each holding idle connections, consuming the pool without releasing.",
-    rootCause: "Connection pool exhaustion caused by idle connection hoarding in user-service pods. Recent scale-out from 6→12 pods doubled pool consumption without corresponding PgBouncer limit adjustment.",
-    components: ["db-primary-03 (PostgreSQL 15)", "pgbouncer-svc", "user-service (12 pods)"],
-    confidence: 88,
-    recommendation: {
-      steps: [
-        "Kill idle connections older than 5 minutes",
-        "Increase PgBouncer max_client_conn to 200",
-        "Set pool_size per database to 15",
-        "Restart user-service pods to reset connection state",
-      ],
-      commands: [
-        { id: "cmd-1", label: "List idle connections", cmd: `psql -h db-primary-03 -U admin -c "SELECT pid, state, query_start, application_name FROM pg_stat_activity WHERE state='idle' ORDER BY query_start;"`, risk: "safe" },
-        { id: "cmd-2", label: "Terminate idle connections (>5min)", cmd: `psql -h db-primary-03 -U admin -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state='idle' AND query_start < NOW() - INTERVAL '5 minutes';"`, risk: "high-risk" },
-        { id: "cmd-3", label: "Increase PgBouncer pool limit", cmd: "pgbouncer-ctl -c /etc/pgbouncer/pgbouncer.ini set max_client_conn=200 && pgbouncer-ctl reload", risk: "needs-approval" },
-      ],
-      rollback: "pgbouncer-ctl set max_client_conn=100 && pgbouncer-ctl reload",
-      riskLevel: "high-risk",
-      dryRunOutput: `DRY RUN SIMULATION (db-primary-03):
-> pg_stat_activity query:
-  Total connections: 100/100 (SATURATED)
-  Idle connections: 67 (avg idle time: 8.3 min)
-  Idle >5min: 52 connections (eligible for termination)
-> pg_terminate_backend → would terminate 52 idle pids
-  Active queries affected: 0
-> PgBouncer reload: max_client_conn 100→200
-─────────────────────────────────
-Estimated impact: ⚠️ Terminates idle sessions  ✓ No data loss  ✓ Reversible`,
-    },
-  },
-};
-
-// ─── Utility ────────────────────────────────────────────────────────────────
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-const RiskBadge = ({ level }) => {
-  const map = {
-    safe: { label: "SAFE", color: "#00d68f", bg: "rgba(0,214,143,0.12)" },
-    "needs-approval": { label: "NEEDS APPROVAL", color: "#f5a623", bg: "rgba(245,166,35,0.12)" },
-    "high-risk": { label: "HIGH RISK", color: "#ff4d6d", bg: "rgba(255,77,109,0.12)" },
-  };
-  const s = map[level] || map["safe"];
-  return (
-    <span style={{ background: s.bg, color: s.color, border: `1px solid ${s.color}40`, borderRadius: 4, padding: "2px 8px", fontSize: 11, fontWeight: 700, letterSpacing: 1, fontFamily: "monospace" }}>
-      {s.label}
-    </span>
-  );
-};
-
-const SeverityBadge = ({ sev }) => {
-  const map = { P1: "#ff4d6d", P2: "#f5a623", P3: "#f0e040", P4: "#aaa" };
-  return (
-    <span style={{ background: `${map[sev]}22`, color: map[sev], border: `1px solid ${map[sev]}55`, borderRadius: 4, padding: "2px 8px", fontSize: 11, fontWeight: 700, fontFamily: "monospace" }}>
-      {sev}
-    </span>
-  );
-};
-
-const StepIndicator = ({ steps, current }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 32 }}>
-    {steps.map((s, i) => (
-      <div key={i} style={{ display: "flex", alignItems: "center", flex: i < steps.length - 1 ? 1 : "none" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
-            background: i < current ? "#00d68f" : i === current ? "#4361ee" : "transparent",
-            border: `2px solid ${i < current ? "#00d68f" : i === current ? "#4361ee" : "#333"}`,
-            fontSize: 13, fontWeight: 700, color: i <= current ? "#fff" : "#555",
-            transition: "all 0.3s ease",
-          }}>
-            {i < current ? "✓" : i + 1}
-          </div>
-          <span style={{ fontSize: 10, color: i === current ? "#a0b4ff" : i < current ? "#00d68f" : "#555", whiteSpace: "nowrap", fontWeight: i === current ? 700 : 400 }}>{s}</span>
-        </div>
-        {i < steps.length - 1 && (
-          <div style={{ flex: 1, height: 2, background: i < current ? "#00d68f" : "#222", margin: "0 8px", marginBottom: 18, transition: "background 0.3s ease" }} />
-        )}
-      </div>
-    ))}
-  </div>
-);
-
-// ─── Sub-views ────────────────────────────────────────────────────────────────
-
-function TicketList({ onSelect }) {
-  return (
-    <div>
-      <div style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 700, color: "#e8eaf6", margin: 0 }}>Incident Queue</h2>
-        <p style={{ color: "#666", fontSize: 14, marginTop: 6 }}>3 open incidents awaiting AI analysis & engineer review</p>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {MOCK_TICKETS.map((t) => (
-          <div key={t.id} onClick={() => onSelect(t)}
-            style={{ background: "#0d0d14", border: "1px solid #1e1e2e", borderRadius: 10, padding: "18px 20px", cursor: "pointer", transition: "all 0.2s", display: "flex", alignItems: "flex-start", gap: 16 }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = "#4361ee"}
-            onMouseLeave={e => e.currentTarget.style.borderColor = "#1e1e2e"}
-          >
-            <div style={{ flex: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <SeverityBadge sev={t.severity} />
-                <span style={{ fontSize: 13, color: "#555", fontFamily: "monospace" }}>{t.id}</span>
-                <span style={{ fontSize: 12, color: "#555" }}>•</span>
-                <span style={{ fontSize: 12, color: "#4361ee" }}>{t.env}</span>
-              </div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: "#e8eaf6", marginBottom: 6 }}>{t.title}</div>
-              <div style={{ fontSize: 13, color: "#666" }}>{t.app} · {t.host}</div>
-            </div>
-            <div style={{ color: "#4361ee", fontSize: 20, marginTop: 4 }}>→</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function useTypewriter(text, speed = 12) {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
-  useEffect(() => {
-    setDisplayed("");
-    setDone(false);
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      setDisplayed(text.slice(0, i));
-      if (i >= text.length) { clearInterval(interval); setDone(true); }
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text]);
-  return { displayed, done };
-}
-
-function ContextFetch({ ticket, onDone }) {
-  const [phase, setPhase] = useState(0);
-  const kb = MOCK_KB.filter(k => k.tags.some(t => ticket.tags.includes(t)));
-  const past = MOCK_PAST;
-
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => setPhase(1), 600),
-      setTimeout(() => setPhase(2), 1400),
-      setTimeout(() => setPhase(3), 2200),
-      setTimeout(() => setPhase(4), 3000),
-      setTimeout(() => setPhase(5), 3600),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  const items = [
-    { label: "Fetching SOP articles…", done: phase > 1 },
-    { label: "Loading SOPs & runbooks…", done: phase > 2 },
-    { label: "Matching relevant knowledge base articles…", done: phase > 3 },
-  ];
-
-  return (
-    <div>
-      <h3 style={{ color: "#a0b4ff", fontSize: 14, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 20 }}>Context Builder</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
-        {items.map((it, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, color: it.done ? "#00d68f" : phase === i ? "#a0b4ff" : "#444", fontSize: 14, transition: "color 0.3s" }}>
-            <span>{it.done ? "✓" : phase === i ? "⟳" : "○"}</span>
-            <span>{it.label}</span>
-          </div>
-        ))}
-      </div>
-      {phase >= 3 && (
-        <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-          <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Matched Knowledge Base</div>
-          {kb.map(k => (
-            <div key={k.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderBottom: "1px solid #111" }}>
-              <span style={{ fontSize: 12, color: "#4361ee", fontFamily: "monospace" }}>{k.id}</span>
-              <span style={{ fontSize: 13, color: "#c0c8ff" }}>{k.title}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {phase >= 4 && (
-        <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-          <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Similar Past Incidents</div>
-          {past.map(p => (
-            <div key={p.id} style={{ padding: "6px 0", borderBottom: "1px solid #111" }}>
-              <div style={{ display: "flex", gap: 10, marginBottom: 4 }}>
-                <span style={{ fontSize: 12, color: "#4361ee", fontFamily: "monospace" }}>{p.id}</span>
-                <span style={{ fontSize: 12, color: "#00d68f" }}>{p.similarity}% match</span>
-                <span style={{ fontSize: 12, color: "#555" }}>{p.date}</span>
-              </div>
-              <div style={{ fontSize: 13, color: "#888" }}>{p.resolution}</div>
-            </div>
-          ))}
-        </div>
-      )}
-      {phase >= 5 && (
-        <button onClick={onDone} style={{ background: "#4361ee", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14, marginTop: 8 }}>
-          Run LLM →
-        </button>
-      )}
-    </div>
-  );
-}
-
-function LLMAnalysis({ ticket, onDone }) {
-  const analysis = LLM_ANALYSIS[ticket.id];
-  const { displayed: summaryText, done: summaryDone } = useTypewriter(analysis.summary, 8);
-  const { displayed: rcText, done: rcDone } = useTypewriter(summaryDone ? analysis.rootCause : "", 8);
-  const [showConf, setShowConf] = useState(false);
-
-  useEffect(() => {
-    if (rcDone) setTimeout(() => setShowConf(true), 300);
-  }, [rcDone]);
-
-  return (
-    <div>
-      <h3 style={{ color: "#a0b4ff", fontSize: 14, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 20 }}>LLM Summarization</h3>
-      <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-        <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Incident Summary</div>
-        <p style={{ fontSize: 14, color: "#c0c8ff", lineHeight: 1.7, margin: 0, minHeight: 80 }}>{summaryText}<span style={{ opacity: summaryDone ? 0 : 1 }}>▋</span></p>
-      </div>
-      {summaryDone && (
-        <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-          <div style={{ fontSize: 12, color: "#f5a623", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Probable Root Cause</div>
-          <p style={{ fontSize: 14, color: "#c0c8ff", lineHeight: 1.7, margin: 0, minHeight: 60 }}>{rcText}<span style={{ opacity: rcDone ? 0 : 1 }}>▋</span></p>
-        </div>
-      )}
-      {showConf && (
-        <div style={{ display: "flex", gap: 16, marginBottom: 20 }}>
-          <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, flex: 1 }}>
-            <div style={{ fontSize: 12, color: "#666", marginBottom: 8, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>Confidence</div>
-            <div style={{ fontSize: 32, fontWeight: 800, color: analysis.confidence > 85 ? "#00d68f" : "#f5a623" }}>{analysis.confidence}%</div>
-          </div>
-          <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, flex: 2 }}>
-            <div style={{ fontSize: 12, color: "#666", marginBottom: 8, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>Impacted Components</div>
-            {analysis.components.map((c, i) => (
-              <div key={i} style={{ fontSize: 13, color: "#c0c8ff", padding: "3px 0" }}>• {c}</div>
-            ))}
-          </div>
-        </div>
-      )}
-      {showConf && (
-        <button onClick={onDone} style={{ background: "#4361ee", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
-          View Recommendations →
-        </button>
-      )}
-    </div>
-  );
-}
-
-function HITLReview({ ticket, onDecision }) {
-  const analysis = LLM_ANALYSIS[ticket.id];
-  const rec = analysis.recommendation;
-  const [showDryRun, setShowDryRun] = useState(false);
-  const [editingCmd, setEditingCmd] = useState(null);
-  const [commands, setCommands] = useState(rec.commands);
-  const [note, setNote] = useState("");
-  const [tab, setTab] = useState("recommendation");
-
-  const updateCmd = (id, val) => setCommands(cs => cs.map(c => c.id === id ? { ...c, cmd: val } : c));
-
-  return (
-    <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-        <h3 style={{ color: "#a0b4ff", fontSize: 14, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", margin: 0 }}>HITL Review – L2/L3 Engineer</h3>
-        <RiskBadge level={rec.riskLevel} />
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: "flex", borderBottom: "1px solid #1e1e2e", marginBottom: 20 }}>
-        {["recommendation", "ticket", "dry-run"].map(t => (
-          <button key={t} onClick={() => setTab(t)}
-            style={{ background: "none", border: "none", borderBottom: `2px solid ${tab === t ? "#4361ee" : "transparent"}`, color: tab === t ? "#a0b4ff" : "#555", padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700, textTransform: "capitalize", marginBottom: -1 }}>
-            {t === "dry-run" ? "Dry Run Output" : t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {tab === "ticket" && (
-        <div>
-          <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-            <div style={{ display: "flex", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
-              <SeverityBadge sev={ticket.severity} />
-              <span style={{ fontSize: 13, color: "#4361ee", fontFamily: "monospace" }}>{ticket.id}</span>
-              <span style={{ fontSize: 13, color: "#666" }}>{ticket.env} · {ticket.host}</span>
-            </div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: "#e8eaf6", marginBottom: 10 }}>{ticket.title}</div>
-            <p style={{ fontSize: 13, color: "#888", lineHeight: 1.7, margin: 0 }}>{ticket.description}</p>
-          </div>
-          <div style={{ background: "#050509", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16 }}>
-            <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Raw Logs</div>
-            <pre style={{ fontSize: 12, color: "#7aebbc", margin: 0, lineHeight: 1.7, overflow: "auto", fontFamily: "'Fira Code', monospace" }}>{ticket.logs}</pre>
-          </div>
-        </div>
-      )}
-
-      {tab === "recommendation" && (
-        <div>
-          <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-            <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Resolution Steps</div>
-            {rec.steps.map((s, i) => (
-              <div key={i} style={{ display: "flex", gap: 12, padding: "6px 0", borderBottom: "1px solid #111" }}>
-                <span style={{ color: "#4361ee", fontFamily: "monospace", fontSize: 13, minWidth: 20 }}>{i + 1}.</span>
-                <span style={{ fontSize: 13, color: "#c0c8ff" }}>{s}</span>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-            <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Commands to Execute</div>
-            {commands.map((c) => (
-              <div key={c.id} style={{ marginBottom: 12, padding: 12, background: "#050509", borderRadius: 6, border: "1px solid #1a1a2a" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                  <span style={{ fontSize: 13, color: "#e8eaf6", fontWeight: 600 }}>{c.label}</span>
-                  <RiskBadge level={c.risk} />
-                </div>
-                {editingCmd === c.id ? (
-                  <div>
-                    <textarea value={c.cmd} onChange={e => updateCmd(c.id, e.target.value)}
-                      style={{ width: "100%", background: "#0d0d1a", border: "1px solid #4361ee", borderRadius: 4, color: "#7aebbc", fontFamily: "'Fira Code', monospace", fontSize: 12, padding: 8, lineHeight: 1.6, boxSizing: "border-box", resize: "vertical", minHeight: 60 }} />
-                    <button onClick={() => setEditingCmd(null)} style={{ marginTop: 6, background: "#4361ee22", color: "#a0b4ff", border: "1px solid #4361ee", borderRadius: 4, padding: "4px 12px", cursor: "pointer", fontSize: 12 }}>Done</button>
-                  </div>
-                ) : (
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                    <code style={{ flex: 1, fontSize: 12, color: "#7aebbc", fontFamily: "'Fira Code', monospace", background: "#050509", padding: "6px 8px", borderRadius: 4, lineHeight: 1.7, wordBreak: "break-all" }}>{c.cmd}</code>
-                    <button onClick={() => setEditingCmd(c.id)} style={{ background: "none", border: "1px solid #333", borderRadius: 4, color: "#666", padding: "4px 10px", cursor: "pointer", fontSize: 11, flexShrink: 0, marginTop: 2 }}>Edit</button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div style={{ background: "#0a0a12", border: "1px solid #ff4d6d22", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-            <div style={{ fontSize: 12, color: "#ff4d6d", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 6 }}>Rollback Command</div>
-            <code style={{ fontSize: 12, color: "#ff9aaa", fontFamily: "'Fira Code', monospace" }}>{rec.rollback}</code>
-          </div>
-        </div>
-      )}
-
-      {tab === "dry-run" && (
-        <div>
-          <div style={{ background: "#050509", border: "1px solid #00d68f33", borderRadius: 8, padding: 16 }}>
-            <div style={{ fontSize: 12, color: "#00d68f", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Dry Run Simulation</div>
-            <pre style={{ fontSize: 13, color: "#7aebbc", margin: 0, lineHeight: 1.8, fontFamily: "'Fira Code', monospace", whiteSpace: "pre-wrap" }}>{rec.dryRunOutput}</pre>
-          </div>
-          <div style={{ marginTop: 12, padding: 10, background: "#0d0d14", borderRadius: 6, border: "1px solid #333", fontSize: 12, color: "#666" }}>
-            ⚠️ This is a simulation only. No changes were made to the target system.
-          </div>
-        </div>
-      )}
-
-      {/* Engineer note */}
-      <div style={{ marginTop: 20 }}>
-        <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>Engineer Notes (optional)</div>
-        <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Add context, concerns, or modifications rationale…"
-          style={{ width: "100%", background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, color: "#c0c8ff", fontSize: 13, padding: "10px 14px", lineHeight: 1.7, boxSizing: "border-box", resize: "vertical", minHeight: 70, fontFamily: "inherit", outline: "none" }} />
-      </div>
-
-      {/* Decision buttons */}
-      <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-        <button onClick={() => onDecision("approve", commands, note)}
-          style={{ flex: 1, background: "#00d68f", color: "#000", border: "none", borderRadius: 8, padding: "12px 0", fontWeight: 800, cursor: "pointer", fontSize: 14, letterSpacing: 0.5 }}>
-          ✓ Approve & Queue
-        </button>
-        <button onClick={() => onDecision("modify", commands, note)}
-          style={{ flex: 1, background: "#f5a62322", color: "#f5a623", border: "1px solid #f5a623", borderRadius: 8, padding: "12px 0", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
-          ✎ Approve as Modified
-        </button>
-        <button onClick={() => onDecision("reject", commands, note)}
-          style={{ flex: 1, background: "#ff4d6d22", color: "#ff4d6d", border: "1px solid #ff4d6d", borderRadius: 8, padding: "12px 0", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
-          ✕ Reject
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ExecutionView({ ticket, decision, commands, onDone }) {
-  const [execPhase, setExecPhase] = useState(0);
-  const [cmdStatuses, setCmdStatuses] = useState({});
-
-  useEffect(() => {
-    if (decision === "reject") { setExecPhase(99); return; }
-    const run = async () => {
-      await sleep(500); setExecPhase(1);
-      await sleep(800); setExecPhase(2);
-      await sleep(600); setExecPhase(3);
-      // simulate command execution
-      for (let i = 0; i < commands.length; i++) {
-        await sleep(700);
-        setCmdStatuses(s => ({ ...s, [commands[i].id]: "running" }));
-        await sleep(900 + Math.random() * 600);
-        setCmdStatuses(s => ({ ...s, [commands[i].id]: "done" }));
+    evidence: [
+      {
+        id: "ev-8041-1",
+        title: "Git Commit Diff Patch",
+        source: "GitHub Enterprise Webhook",
+        timestamp: "2026-10-11T14:32:15Z",
+        hash: "sha256:4d8a1e2f93bc67e0...",
+        content: `commit a7f9c2d8471b0e32049e7a83301fbdf929e013a2\nAuthor: David Miller <d.miller@ajaia.internal>\nDate:   Sun Oct 11 14:31:40 2026 -0400\n\n    feat: add streaming chat client for customer support bot\n\ndiff --git a/server/config/openai.js b/server/config/openai.js\n--- a/server/config/openai.js\n+++ b/server/config/openai.js\n@@ -1,4 +1,7 @@\n-const apiKey = process.env.OPENAI_API_KEY;\n+// FIXME: temporary hardcode for local dev testing\n+const apiKey = "sk-proj-9mF0xKl84b901Zl9xT209Yw1xKv99824nL";\n+export const openaiClient = new OpenAI({ apiKey });`
       }
-      await sleep(500); setExecPhase(4);
-      await sleep(600); setExecPhase(5);
-    };
-    run();
-  }, []);
-
-  if (execPhase === 99) return (
-    <div>
-      <div style={{ textAlign: "center", padding: 40 }}>
-        <div style={{ fontSize: 48, marginBottom: 16 }}>✕</div>
-        <div style={{ fontSize: 20, fontWeight: 700, color: "#ff4d6d", marginBottom: 12 }}>Ticket Rejected</div>
-        <p style={{ color: "#666", fontSize: 14 }}>Feedback recorded. Knowledge base updated. Ticket status set to Rejected.</p>
-        <button onClick={onDone} style={{ marginTop: 20, background: "#4361ee", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>← Back to Queue</button>
-      </div>
-    </div>
-  );
-
-  const checks = [
-    { label: "Access verification", done: execPhase > 1 },
-    { label: "Target system reachability", done: execPhase > 2 },
-    { label: "Dependency check", done: execPhase > 3 },
-  ];
-
-  return (
-    <div>
-      <h3 style={{ color: "#a0b4ff", fontSize: 14, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 20 }}>Execution Orchestrator</h3>
-
-      <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-        <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Pre-Execution Checks</div>
-        {checks.map((c, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "6px 0", fontSize: 13, color: c.done ? "#00d68f" : "#555", transition: "color 0.3s" }}>
-            <span>{c.done ? "✓" : execPhase > i ? "⟳" : "○"}</span>
-            <span>{c.label}</span>
-          </div>
-        ))}
-      </div>
-
-      {execPhase >= 4 && (
-        <div style={{ background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-          <div style={{ fontSize: 12, color: "#666", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Command Execution</div>
-          {commands.map(c => (
-            <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 0", borderBottom: "1px solid #111" }}>
-              <span style={{ fontSize: 13, color: cmdStatuses[c.id] === "done" ? "#00d68f" : cmdStatuses[c.id] === "running" ? "#f5a623" : "#555" }}>
-                {cmdStatuses[c.id] === "done" ? "✓" : cmdStatuses[c.id] === "running" ? "⟳" : "○"}
-              </span>
-              <span style={{ fontSize: 13, color: "#c0c8ff", flex: 1 }}>{c.label}</span>
-              <span style={{ fontSize: 11, color: "#555", fontFamily: "monospace" }}>
-                {cmdStatuses[c.id] === "done" ? "exit 0" : cmdStatuses[c.id] === "running" ? "running…" : "pending"}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {execPhase >= 5 && (
-        <div>
-          <div style={{ background: "#050509", border: "1px solid #00d68f44", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "#00d68f", marginBottom: 10 }}>✓ Execution Successful</div>
-            <pre style={{ fontSize: 12, color: "#7aebbc", margin: 0, lineHeight: 1.7, fontFamily: "'Fira Code', monospace", whiteSpace: "pre-wrap" }}>
-{`All commands completed successfully.
-Target: ${ticket.host}
-Executed by: L2-eng-session
-Audit log: s3://audit-logs/exec/${ticket.id}-${Date.now()}.json
-Ticket ${ticket.id}: auto-updated → RESOLVED`}
-            </pre>
-          </div>
-          <div style={{ display: "flex", gap: 12 }}>
-            <div style={{ flex: 1, background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 14, fontSize: 13 }}>
-              <div style={{ color: "#666", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>Audit Log</div>
-              <div style={{ color: "#00d68f" }}>✓ Written to Localhost</div>
-            </div>
-            <div style={{ flex: 1, background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 14, fontSize: 13 }}>
-              <div style={{ color: "#666", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>Ticket</div>
-              <div style={{ color: "#00d68f" }}>✓ Auto-closed</div>
-            </div>
-            <div style={{ flex: 1, background: "#0a0a12", border: "1px solid #1e1e2e", borderRadius: 8, padding: 14, fontSize: 13 }}>
-              <div style={{ color: "#666", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>KB Feedback</div>
-              
-             {/* <div style={{ color: "#00d68f" }}>✓ Learned</div> */}
-              
-            </div>
-          </div>
-          <button onClick={onDone} style={{ marginTop: 20, background: "#4361ee", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>← Back to Queue</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Main App ────────────────────────────────────────────────────────────────
-const STEPS = ["Ticket", "Context", "LLM Analysis", "HITL Review", "Execution"];
+    ],
+    checklist: [
+      { id: "chk-1", label: "Source evidence verified against GitHub commit tree", checked: true },
+      { id: "chk-2", label: "Confirmed credential validity in OpenAI developer dashboard", checked: true },
+      { id: "chk-3", label: "Blast radius assessed: No customer data in training prompts", checked: false },
+      { id: "chk-4", label: "Remediation plan reviewed for customer bot availability", checked: false }
+    ],
+    timeline: [
+      { time: "14:31:40", title: "Commit Pushed", desc: "Developer d.miller pushed commit a7f9c2d to feature/support-bot", actor: "System", type: "system" },
+      { time: "14:32:00", title: "Secret Detected", desc: "GitGuardian webhook flagged exposed production token pattern", actor: "GitGuardian", type: "warning" },
+      { time: "14:32:05", title: "AI Triage Ingestion", desc: "Ajaia Triage Bot ingested incident, parsed diff, generated confidence score (96%)", actor: "AI Bot", type: "ai" }
+    ]
+  },
+  {
+    id: "INC-8042",
+    title: "Confidential Payroll & Equity Sheet Shared with 'Anyone with Link'",
+    severity: "P2",
+    category: "Broad Sharing Permissions",
+    source: "Google Workspace Security Center / DLP Monitor",
+    affectedEntity: "Google Drive: 'Ajaia_Q4_Compensation_and_Equity_Grants.xlsx'",
+    created: "2026-10-11T13:45:00Z",
+    approvalStatus: "Pending Review",
+    description: "Google Workspace DLP flagged an internal compensation sheet containing 142 employee names, SSNs, and executive equity grant percentages. Access control list modified to 'Anyone on internet with link can view and download'. 3 anonymous external downloads detected.",
+    aiSummary: {
+      model: "Ajaia-SecOps-Triage (v4.2)",
+      confidence: 94,
+      confidenceRationale: "High confidence based on direct Google Drive Admin Audit log match and DLP regex triggers for SSN patterns.",
+      riskLevel: "NEEDS APPROVAL",
+      executiveSummary: "Confidential HR document exposed to the public internet via Google Drive link sharing. Three anonymous IP downloads recorded. Revert public access immediately, invalidate active link tokens, and export download forensics.",
+      rootCause: "Accidental selection of 'Anyone with the link' option when preparing to share file with external executive compensation auditor.",
+      impactScope: [
+        "142 Employee Records (Names, Tax IDs, Base Salaries)",
+        "Executive Equity Cap Table",
+        "Drive Folder: HR-Executive-Vault",
+        "Compliance: SOC2 CC6.3 & State PII Privacy Statutes"
+      ],
+      actionPlan: [
+        "Revoke 'anyoneWithLink' ACL on document ID 1z9KfM_88xQ_CompQ4.",
+        "Revert file permissions to restricted group: hr-leadership@ajaia.internal.",
+        "Extract IP addresses and timestamps of the 3 anonymous download sessions."
+      ],
+      commands: [
+        {
+          id: "cmd-8042-1",
+          label: "Inspect Current File ACLs",
+          cmd: 'gam user s.jenkins@ajaia.internal show drivefileacl "1z9KfM_88xQ_CompQ4" format json',
+          risk: "SAFE",
+          selected: true,
+          description: "Read-only inspection of active drive permissions."
+        },
+        {
+          id: "cmd-8042-2",
+          label: "Delete Public Link Permission",
+          cmd: 'gam user s.jenkins@ajaia.internal delete drivefileacl "1z9KfM_88xQ_CompQ4" "anyoneWithLink"',
+          risk: "NEEDS APPROVAL",
+          selected: true,
+          description: "Removes public link access while preserving direct owner permissions."
+        }
+      ],
+      rollbackPlan: "If authorized collaborator access is severed, re-grant domain-specific view access via Google Groups (hr-leadership@ajaia.internal)."
+    },
+    evidence: [],
+    checklist: [],
+    timeline: []
+  },
+  {
+    id: "INC-8043",
+    title: "Shadow AI Browser Extension Granted Full Mail & Calendar Scopes",
+    severity: "P2",
+    category: "Unapproved AI Integrations",
+    source: "Google Workspace OAuth Monitor & CASB Alert",
+    affectedEntity: "User: r.chen@ajaia.internal (Head of Product) • App: 'QuickNotes AI Summarizer'",
+    created: "2026-10-11T12:15:00Z",
+    approvalStatus: "Pending Review",
+    description: "Cloud Access Security Broker (CASB) detected an unauthorized OAuth token grant for third-party extension 'QuickNotes AI'. The app requested full mail.readonly, calendar.events, and drive.readonly scopes. Vendor domain was registered 18 days ago with no SOC2 certification and privacy policy permitting training on user content.",
+    aiSummary: {
+      model: "Ajaia-SecOps-Triage (v4.2)",
+      confidence: 91,
+      confidenceRationale: "Verified active OAuth grant in Google Workspace directory and cross-referenced vendor against unvetted third-party software registry.",
+      riskLevel: "NEEDS APPROVAL",
+      executiveSummary: "Unvetted shadow AI tool installed by executive product lead granted excessive read permissions into corporate emails and roadmap calendars. Revoke OAuth grant, block app domain-wide, and offer vetted enterprise AI alternative.",
+      rootCause: "Employee bypassed IT software procurement and installed unvetted Chrome marketplace extension for meeting summarization.",
+      impactScope: [
+        "Executive Gmail Inbox & Drafts (r.chen@ajaia.internal)",
+        "Internal Strategic Product Roadmap Calendars",
+        "Compliance: SOC2 CC6.6 (Logical Boundaries)"
+      ],
+      actionPlan: [
+        "Revoke OAuth token grant across Google Workspace organization for QuickNotes AI.",
+        "Add OAuth Client ID 7782194-quicknotes-ai to domain-wide blocklist."
+      ],
+      commands: [
+        {
+          id: "cmd-8043-1",
+          label: "Revoke QuickNotes AI OAuth Token",
+          cmd: "gam oauth revoke user r.chen@ajaia.internal clientid 7782194-quicknotes-ai.apps.googleusercontent.com",
+          risk: "NEEDS APPROVAL",
+          selected: true,
+          description: "Terminates the third-party refresh token immediately."
+        }
+      ],
+      rollbackPlan: "Restore OAuth permissions if vendor completes enterprise third-party risk assessment."
+    },
+    evidence: [],
+    checklist: [],
+    timeline: []
+  },
+  {
+    id: "INC-8044",
+    title: "Contractor Retained Production AWS & Okta Access 7 Days Post-Contract",
+    severity: "P3",
+    category: "Onboarding Gaps",
+    source: "Identity Governance (BambooHR vs. Okta/AWS IAM Reconciliation)",
+    affectedEntity: "Identity: alex.turner@contractor.ajaia.internal (Apex Technical)",
+    created: "2026-10-11T09:00:00Z",
+    approvalStatus: "Pending Review",
+    description: "Automated weekly identity reconciliation found a discrepancy: Contractor Alex Turner's engagement ended on 2026-10-04 per HRIS records, but Okta identity remains in 'Active' status with SSO entitlements for AWS Production Console (ReadOnly) and Jira.",
+    aiSummary: {
+      model: "Ajaia-SecOps-Triage (v4.2)",
+      confidence: 95,
+      confidenceRationale: "Mismatched state between authoritative HRIS record (terminated) and directory state (active) confirmed via SCIM API logs.",
+      riskLevel: "NEEDS APPROVAL",
+      executiveSummary: "Offboarding automation failure left contractor with active production AWS console access for 7 days post-contract. Suspend Okta identity and revoke active STS sessions immediately.",
+      rootCause: "HR ticket in Jira Service Management was closed before Okta SCIM deprovisioning webhook completed due to a gateway timeout.",
+      impactScope: [
+        "Okta Identity (alex.turner@contractor.ajaia.internal)",
+        "AWS Production Console (ReadOnlyAccess Role)",
+        "Compliance: SOC2 CC6.3 (Timely Deprovisioning)"
+      ],
+      actionPlan: [
+        "Immediately suspend Okta account for alex.turner@contractor.ajaia.internal.",
+        "Revoke all active AWS IAM temporary sessions and STS tokens."
+      ],
+      commands: [
+        {
+          id: "cmd-8044-1",
+          label: "Suspend Okta Directory Account",
+          cmd: 'okta-cli user suspend --id 00u8x92k4Lp9 --reason "HITL Offboarding Remediation"',
+          risk: "NEEDS APPROVAL",
+          selected: true,
+          description: "Instantly revokes SSO access across all connected SaaS and cloud applications."
+        }
+      ],
+      rollbackPlan: "Un-suspend Okta user if contractor engagement was extended by hiring manager."
+    },
+    evidence: [],
+    checklist: [],
+    timeline: []
+  }
+];
 
 export default function App() {
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [step, setStep] = useState(0);
-  const [decision, setDecision] = useState(null);
-  const [approvedCmds, setApprovedCmds] = useState(null);
+  const [incidents, setIncidents] = useState(INITIAL_INCIDENTS);
+  const [selectedId, setSelectedId] = useState(null);
+  const [activeTab, setActiveTab] = useState("ai");
 
-  const handleSelect = (t) => { setSelectedTicket(t); setStep(1); setDecision(null); setApprovedCmds(null); };
-  const handleBack = () => { setSelectedTicket(null); setStep(0); };
-  const handleDecision = (d, cmds, note) => { setDecision(d); setApprovedCmds(cmds); setStep(4); };
+  const selectedIncident = incidents.find((i) => i.id === selectedId);
+
+  const handleDecision = (id, decision) => {
+    setIncidents((prev) =>
+      prev.map((inc) =>
+        inc.id === id
+          ? {
+              ...inc,
+              approvalStatus:
+                decision === "approve"
+                  ? "Approved"
+                  : decision === "request_changes"
+                  ? "Changes Requested"
+                  : "Rejected"
+            }
+          : inc
+      )
+    );
+  };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#07070f", color: "#e8eaf6", fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}>
-      {/* Top nav */}
-      <div style={{ background: "#0a0a14", borderBottom: "1px solid #1e1e2e", padding: "0 32px", display: "flex", alignItems: "center", height: 56, gap: 24 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 28, height: 28, background: "#4361ee", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>⚡</div>
-          <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>HITL-Incidents-Triage</span>
-          <span style={{ fontSize: 11, color: "#4361ee", background: "#4361ee22", padding: "2px 8px", borderRadius: 20, fontWeight: 700 }}>POC</span>
-        </div>
-        <div style={{ flex: 1 }} />
-        <div style={{ display: "flex", gap: 24, fontSize: 13, color: "#555" }}>
-          <span style={{ color: "#a0b4ff" }}>HITL Platform</span>
-          <span>Audit Logs</span>
-          <span>SOP Manager</span>
-        </div>
-        <div style={{ width: 32, height: 32, background: "#4361ee44", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "#a0b4ff", fontWeight: 700 }}>L1</div>
+    <div style={{ minHeight: "100vh", background: "#090d16", color: "#f8fafc", fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" }}>
+      {/* Top Disclaimer Banner */}
+      <div style={{ background: "linear-gradient(90deg, #1e1b4b 0%, #172554 100%)", borderBottom: "1px solid #3730a3", padding: "10px 24px", fontSize: "13px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span><strong>DEMO PROTOTYPE ONLY</strong> — Simulated environment for Ajaia IT Manager assessment. No live infrastructure or credentials are touched.</span>
+        <a href="/" style={{ color: "#93c5fd", textDecoration: "underline", fontSize: "12px" }}>Open Single-File View</a>
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
-        {!selectedTicket ? (
-          <TicketList onSelect={handleSelect} />
+      {/* Header */}
+      <header style={{ background: "#0f172a", borderBottom: "1px solid #1e293b", padding: "14px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }} onClick={() => setSelectedId(null)}>
+          <div style={{ width: "32px", height: "32px", background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "bold" }}>⚡</div>
+          <span style={{ fontSize: "16px", fontWeight: "bold" }}>HITL Incident Triage</span>
+          <span style={{ background: "rgba(99, 102, 241, 0.2)", border: "1px solid rgba(99, 102, 241, 0.4)", color: "#a5b4fc", fontSize: "10px", padding: "2px 6px", borderRadius: "12px" }}>AJAIA DEMO</span>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "24px" }}>
+        {!selectedIncident ? (
+          <div>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "16px" }}>Incident Queue</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {incidents.map((inc) => (
+                <div
+                  key={inc.id}
+                  onClick={() => { setSelectedId(inc.id); setActiveTab("ai"); }}
+                  style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "10px", padding: "16px 20px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                >
+                  <div>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "6px" }}>
+                      <span style={{ fontFamily: "monospace", fontSize: "12px", color: "#93c5fd", fontWeight: "bold" }}>{inc.id}</span>
+                      <span style={{ background: inc.severity === "P1" ? "rgba(239,68,68,0.2)" : "rgba(245,158,11,0.2)", color: inc.severity === "P1" ? "#ef4444" : "#f59e0b", padding: "2px 6px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold" }}>{inc.severity}</span>
+                      <span style={{ background: "#1e293b", color: "#cbd5e1", padding: "2px 6px", borderRadius: "4px", fontSize: "11px" }}>{inc.category}</span>
+                    </div>
+                    <div style={{ fontSize: "15px", fontWeight: "600", color: "#f8fafc" }}>{inc.title}</div>
+                    <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "4px" }}>{inc.affectedEntity}</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: "12px", color: inc.approvalStatus === "Approved" ? "#34d399" : "#fbbf24", fontWeight: "bold" }}>{inc.approvalStatus}</div>
+                    <div style={{ fontSize: "11px", color: "#c084fc", marginTop: "4px" }}>🤖 {inc.aiSummary.confidence}% Match</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
           <div>
             {/* Breadcrumb */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28, fontSize: 13 }}>
-              <button onClick={handleBack} style={{ background: "none", border: "none", color: "#4361ee", cursor: "pointer", padding: 0, fontSize: 13 }}>← Incident Queue</button>
-              <span style={{ color: "#333" }}>/</span>
-              <span style={{ color: "#888" }}>{selectedTicket.id}</span>
-              <span style={{ color: "#333" }}>/</span>
-              <span style={{ color: "#a0b4ff" }}>{STEPS[step]}</span>
+            <div style={{ marginBottom: "16px", fontSize: "13px", color: "#94a3b8" }}>
+              <span onClick={() => setSelectedId(null)} style={{ color: "#6366f1", cursor: "pointer", fontWeight: "bold" }}>&larr; Incident Queue</span>
+              <span> / </span>
+              <span style={{ color: "#93c5fd" }}>{selectedIncident.id}</span>
             </div>
 
-            {/* Ticket header */}
-            <div style={{ background: "#0d0d14", border: "1px solid #1e1e2e", borderRadius: 10, padding: "16px 20px", marginBottom: 28, display: "flex", alignItems: "center", gap: 14 }}>
-              <SeverityBadge sev={selectedTicket.severity} />
-              <span style={{ fontFamily: "monospace", fontSize: 13, color: "#4361ee" }}>{selectedTicket.id}</span>
-              <span style={{ fontSize: 15, fontWeight: 600, color: "#e8eaf6", flex: 1 }}>{selectedTicket.title}</span>
-              <span style={{ fontSize: 12, color: "#555" }}>{selectedTicket.env} · {selectedTicket.app}</span>
+            {/* Incident Header */}
+            <div style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "10px", padding: "20px", marginBottom: "20px" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "8px" }}>{selectedIncident.title}</h2>
+              <p style={{ fontSize: "13px", color: "#94a3b8", marginBottom: "12px" }}>{selectedIncident.description}</p>
+              <div style={{ display: "flex", gap: "10px", fontSize: "12px", color: "#cbd5e1" }}>
+                <span><strong>Target:</strong> {selectedIncident.affectedEntity}</span>
+                <span>&bull;</span>
+                <span><strong>Source:</strong> {selectedIncident.source}</span>
+                <span>&bull;</span>
+                <span style={{ color: selectedIncident.approvalStatus === "Approved" ? "#34d399" : "#fbbf24" }}><strong>Status:</strong> {selectedIncident.approvalStatus}</span>
+              </div>
             </div>
 
-            <StepIndicator steps={STEPS} current={step} />
+            {/* Separated Three-Tier Tabs */}
+            <div style={{ display: "flex", gap: "10px", borderBottom: "1px solid #1e293b", marginBottom: "20px" }}>
+              <button
+                onClick={() => setActiveTab("ai")}
+                style={{ background: "none", border: "none", borderBottom: activeTab === "ai" ? "2px solid #6366f1" : "none", color: activeTab === "ai" ? "#6366f1" : "#94a3b8", padding: "10px 16px", fontWeight: "bold", cursor: "pointer" }}
+              >
+                1. AI Triage Summary
+              </button>
+              <button
+                onClick={() => setActiveTab("evidence")}
+                style={{ background: "none", border: "none", borderBottom: activeTab === "evidence" ? "2px solid #6366f1" : "none", color: activeTab === "evidence" ? "#6366f1" : "#94a3b8", padding: "10px 16px", fontWeight: "bold", cursor: "pointer" }}
+              >
+                2. Source Ground Truth Evidence
+              </button>
+              <button
+                onClick={() => setActiveTab("hitl")}
+                style={{ background: "none", border: "none", borderBottom: activeTab === "hitl" ? "2px solid #6366f1" : "none", color: activeTab === "hitl" ? "#6366f1" : "#94a3b8", padding: "10px 16px", fontWeight: "bold", cursor: "pointer" }}
+              >
+                3. Human Analyst Gate
+              </button>
+            </div>
 
-            <div style={{ background: "#0d0d14", border: "1px solid #1e1e2e", borderRadius: 12, padding: 24 }}>
-              {step === 1 && <ContextFetch ticket={selectedTicket} onDone={() => setStep(2)} />}
-              {step === 2 && <LLMAnalysis ticket={selectedTicket} onDone={() => setStep(3)} />}
-              {step === 3 && <HITLReview ticket={selectedTicket} onDecision={handleDecision} />}
-              {step === 4 && <ExecutionView ticket={selectedTicket} decision={decision} commands={approvedCmds || []} onDone={handleBack} />}
+            {/* Tab Contents */}
+            <div style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "10px", padding: "20px" }}>
+              {activeTab === "ai" && (
+                <div>
+                  <h3 style={{ fontSize: "15px", fontWeight: "bold", color: "#c084fc", marginBottom: "10px" }}>🤖 AI Assessment ({selectedIncident.aiSummary.confidence}% Confidence)</h3>
+                  <p style={{ fontSize: "13px", lineHeight: "1.6", marginBottom: "16px" }}>{selectedIncident.aiSummary.executiveSummary}</p>
+                  <div style={{ background: "#070a12", borderLeft: "4px solid #f59e0b", padding: "12px", borderRadius: "4px", fontSize: "13px", marginBottom: "16px" }}>
+                    <strong>Root Cause:</strong> {selectedIncident.aiSummary.rootCause}
+                  </div>
+                  <h4 style={{ fontSize: "13px", fontWeight: "bold", marginBottom: "8px" }}>Proposed Actions:</h4>
+                  <ul style={{ paddingLeft: "18px", fontSize: "13px", color: "#cbd5e1", lineHeight: "1.6" }}>
+                    {selectedIncident.aiSummary.actionPlan.map((p, idx) => (
+                      <li key={idx}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {activeTab === "evidence" && (
+                <div>
+                  <h3 style={{ fontSize: "15px", fontWeight: "bold", color: "#38bdf8", marginBottom: "10px" }}>🔒 Ground Truth Telemetry</h3>
+                  {selectedIncident.evidence && selectedIncident.evidence.length > 0 ? (
+                    <div>
+                      <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "8px" }}>
+                        Source: {selectedIncident.evidence[0].source} &bull; Hash: {selectedIncident.evidence[0].hash}
+                      </div>
+                      <pre style={{ background: "#030712", border: "1px solid #1e293b", padding: "14px", borderRadius: "6px", fontSize: "12px", color: "#a7f3d0", overflowX: "auto" }}>
+                        {selectedIncident.evidence[0].content}
+                      </pre>
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: "13px", color: "#94a3b8" }}>Raw telemetry artifacts preserved in secure telemetry store.</p>
+                  )}
+                </div>
+              )}
+
+              {activeTab === "hitl" && (
+                <div>
+                  <h3 style={{ fontSize: "15px", fontWeight: "bold", color: "#10b981", marginBottom: "10px" }}>👤 Human-In-The-Loop Approval Gate</h3>
+                  <p style={{ fontSize: "13px", color: "#94a3b8", marginBottom: "16px" }}>
+                    Review evidence and confirm action plan before authorizing execution.
+                  </p>
+                  <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+                    <button
+                      onClick={() => handleDecision(selectedIncident.id, "approve")}
+                      style={{ background: "#10b981", color: "#064e3b", border: "none", borderRadius: "6px", padding: "10px 18px", fontWeight: "bold", cursor: "pointer" }}
+                    >
+                      ✓ Approve & Dispatch
+                    </button>
+                    <button
+                      onClick={() => handleDecision(selectedIncident.id, "request_changes")}
+                      style={{ background: "#f59e0b", color: "#78350f", border: "none", borderRadius: "6px", padding: "10px 18px", fontWeight: "bold", cursor: "pointer" }}
+                    >
+                      ✎ Request Changes
+                    </button>
+                    <button
+                      onClick={() => handleDecision(selectedIncident.id, "reject")}
+                      style={{ background: "#ef4444", color: "#fff", border: "none", borderRadius: "6px", padding: "10px 18px", fontWeight: "bold", cursor: "pointer" }}
+                    >
+                      ✕ Reject
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
-      </div>
-
-      {/* Footer guarantee bar */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#0a0a14", borderTop: "1px solid #1e1e2e", padding: "8px 32px", display: "flex", gap: 32, justifyContent: "center" }}>
-        {[
-          "🔒 No auto-execution without L2/L3 approval",
-          "🧪 Dry Run ≠ Execution",
-          "🛡️ Secure access · No inbound exposure",
-          "📋 Every action audited & traced",
-        ].map((g, i) => (
-          <span key={i} style={{ fontSize: 11, color: "#444", fontWeight: 500 }}>{g}</span>
-        ))}
-      </div>
+      </main>
     </div>
   );
 }

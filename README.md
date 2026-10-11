@@ -73,3 +73,8 @@ For a production deployment in an enterprise IT environment, implement:
 4. **Least-Privilege Scoped Connectors**: Scoped service principles with tight IAM boundary conditions rather than broad admin credentials for cloud providers, Okta, Google Workspace, and Jira Service Management.
 5. **Idempotent Actions & Automated Rollbacks**: Two-phase dry-run commit protocols with health-check monitoring and automatic rollback execution if downstream service degradation occurs.
 6. **Continuous Security Auditing**: Independent penetration testing, regular threat modeling, and client-side authorization bypass prevention.
+
+---
+
+*Ajaia IT Manager Assessment — Verified & Deployed October 2026*
+

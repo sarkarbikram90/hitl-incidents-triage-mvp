@@ -1,0 +1,6 @@
+/* HITL Incident Triage Application Styles */
+.app-container {
+  min-height: 100vh;
+  background-color: #090d16;
+  color: #f8fafc;
+}
