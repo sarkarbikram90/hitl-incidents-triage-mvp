@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>HITL Incident Triage — Enterprise AI Security Operations Center</title>
-  <!-- Ajaia IT Manager & AI Consultant Assessment Demo (October 2026) -->
+  <title>Ajaia AI-Native IT Operations &amp; Ticketing Hub</title>
+  <!-- Ajaia IT Manager Assessment: Systems, Security & Compliance Design -->
   <style>
     /* =====================================================================
        DESIGN SYSTEM & ENTERPRISE TOKENS
@@ -168,7 +168,7 @@
       color: #fff;
     }
 
-    /* Executive Persona Switcher Bar */
+    /* Executive Persona & KPI Dashboard Bar */
     .executive-bar {
       background: linear-gradient(90deg, rgba(14, 21, 38, 0.95) 0%, rgba(20, 24, 45, 0.95) 100%);
       border-bottom: 1px solid var(--border-subtle);
@@ -214,6 +214,7 @@
       gap: 16px;
       font-family: var(--font-mono);
       font-size: 11px;
+      flex-wrap: wrap;
     }
     .kpi-pill-item {
       display: flex;
@@ -445,6 +446,27 @@
       text-transform: none;
       font-size: 11.5px;
     }
+    .badge-channel {
+      background: rgba(56, 189, 248, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      text-transform: none;
+    }
+    .badge-sla {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+    .badge-sla.urgent {
+      background: rgba(244, 63, 94, 0.12);
+      color: #f43f5e;
+      border-color: rgba(244, 63, 94, 0.3);
+    }
     .risk-badge {
       font-family: var(--font-mono);
       font-size: 10px;
@@ -610,27 +632,6 @@
     .filter-select:focus {
       border-color: var(--accent-indigo);
     }
-    .view-mode-toggle {
-      display: flex;
-      background: var(--bg-surface-sunken);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-sm);
-      padding: 2px;
-    }
-    .view-mode-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-    .view-mode-btn.active {
-      background: var(--bg-surface-elevated);
-      color: #fff;
-    }
 
     /* Incident List View */
     .incident-list {
@@ -677,7 +678,7 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 6px;
-      min-width: 110px;
+      min-width: 125px;
     }
     .incident-id {
       font-family: var(--font-mono);
@@ -881,7 +882,7 @@
       color: #c7d2fe;
     }
 
-    /* Split Command Center (3-Pane Grid Mode) */
+    /* Split Command Center */
     .split-command-center {
       display: grid;
       grid-template-columns: 1.1fr 1fr 1.1fr;
@@ -1036,9 +1037,6 @@
       font-weight: 600;
       color: var(--text-main);
     }
-    .command-code-wrapper {
-      position: relative;
-    }
     .command-code {
       background: #03060d;
       border: 1px solid #1e293b;
@@ -1065,69 +1063,6 @@
       outline: none;
       resize: vertical;
       min-height: 60px;
-    }
-
-    /* Evidence Telemetry Viewer */
-    .evidence-item-selector {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
-    .evidence-chip {
-      background: var(--bg-surface-sunken);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 160px;
-      transition: all 0.15s ease;
-    }
-    .evidence-chip:hover {
-      border-color: var(--accent-indigo);
-    }
-    .evidence-chip.active {
-      background: #172033;
-      border-color: var(--accent-indigo);
-      box-shadow: 0 0 0 1px var(--accent-indigo);
-    }
-    .evidence-chip-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-    .evidence-chip-sub {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-    .evidence-meta-bar {
-      background: var(--bg-surface-sunken);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 9px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 11px;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .evidence-code-block {
-      background: #020409;
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: #a7f3d0;
-      line-height: 1.6;
-      overflow-x: auto;
-      max-height: 420px;
-      white-space: pre;
     }
 
     /* Human Analyst Gatekeeper */
@@ -1213,11 +1148,6 @@
       grid-template-columns: 1.2fr 1fr 1fr;
       gap: 12px;
       margin-top: 12px;
-    }
-    @media (max-width: 680px) {
-      .decision-buttons-row {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* Timeline & Audit */
@@ -1316,12 +1246,8 @@
       color: var(--text-secondary);
       font-family: var(--font-mono);
     }
-    .audit-table tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-      color: var(--text-main);
-    }
 
-    /* Slide-over Drawer / Modal */
+    /* Modals & Drawers */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1345,7 +1271,7 @@
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 720px;
+      max-width: 760px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
@@ -1381,9 +1307,6 @@
       cursor: pointer;
       line-height: 1;
       padding: 4px;
-    }
-    .modal-close-btn:hover {
-      color: var(--text-main);
     }
     .modal-body {
       padding: 24px;
@@ -1477,7 +1400,6 @@
       flex-wrap: wrap;
     }
 
-    /* Empty state */
     .empty-state {
       text-align: center;
       padding: 48px 24px;
@@ -1486,64 +1408,56 @@
       border-radius: var(--radius-md);
     }
 
-    /* Responsive */
     @media (max-width: 800px) {
-      .incident-card {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      .incident-action-col {
-        align-items: flex-start;
-      }
-      .header {
-        padding: 12px 16px;
-      }
-      .app-main {
-        padding: 16px;
-      }
-      .form-row {
-        grid-template-columns: 1fr;
-      }
+      .incident-card { grid-template-columns: 1fr; gap: 12px; }
+      .incident-action-col { align-items: flex-start; }
+      .header { padding: 12px 16px; }
+      .app-main { padding: 16px; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
   <!-- Top Disclaimer Banner -->
-  <aside class="disclaimer-banner" aria-label="Demo Disclaimer">
+  <aside class="disclaimer-banner" aria-label="Assessment Disclaimer">
     <div class="disclaimer-content">
       <span class="pulse-dot green" title="Human Gatekeeper Online"></span>
-      <span class="disclaimer-badge">Ajaia IT Manager &bull; AI Consultant Assessment</span>
-      <span>Simulated Enterprise IT/SOC Sandbox. No live infrastructure or credentials are touched. All approvals stay in local browser storage.</span>
+      <span class="disclaimer-badge">Ajaia IT Manager &bull; AI-Native Systems Assessment</span>
+      <span>Simulated Enterprise IT Operations Hub. Combining incident response under pressure, scaling infrastructure (25+ team), HIPAA/FERPA compliance, and AI triage.</span>
     </div>
     <div class="disclaimer-actions">
-      <button type="button" class="btn-link" onclick="openModal('limitationsModal')">System Limitations &amp; Architecture</button>
+      <button type="button" class="btn-link" onclick="openModal('archModal')">IT Ticketing System Architecture &amp; SLAs</button>
       <button type="button" class="btn-link" onclick="openModal('shortcutsModal')">Hotkeys [?]</button>
     </div>
   </aside>
 
-  <!-- Executive Persona & KPI Bar (Consultant View) -->
+  <!-- Executive Persona & SLA Live Dashboard -->
   <section class="executive-bar" aria-label="Executive Persona Bar">
     <div style="display: flex; align-items: center; gap: 12px;">
       <span style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-weight: 700;">Role Lens:</span>
       <div class="persona-toggle-group">
-        <button type="button" class="persona-btn active" id="btnRoleL2" onclick="setPersonaRole('L2')">L2 Security Specialist</button>
-        <button type="button" class="persona-btn" id="btnRoleCiso" onclick="setPersonaRole('CISO')">CISO Executive Lens</button>
+        <button type="button" class="persona-btn active" id="btnRoleL2" onclick="setPersonaRole('L2')">AI-First IT Manager</button>
+        <button type="button" class="persona-btn" id="btnRoleCiso" onclick="setPersonaRole('CISO')">CISO &amp; Compliance Lens</button>
         <button type="button" class="persona-btn" id="btnRoleAuditor" onclick="setPersonaRole('Auditor')">AI Governance &amp; Auditor</button>
       </div>
     </div>
     <div class="kpi-pills">
       <div class="kpi-pill-item">
-        <span>MTTD Reduction:</span>
-        <span class="kpi-pill-value">-84.2%</span>
+        <span>SLA Compliance:</span>
+        <span class="kpi-pill-value" style="color: #10b981;">98.4% On-Target</span>
       </div>
       <div class="kpi-pill-item">
-        <span>HITL Attestation:</span>
-        <span class="kpi-pill-value" style="color: #10b981;">100% Gated</span>
+        <span>AI Auto-Resolution:</span>
+        <span class="kpi-pill-value" style="color: #c084fc;">41.8% Workload Deflected</span>
       </div>
       <div class="kpi-pill-item">
-        <span>Simulated Exposure Saved:</span>
-        <span class="kpi-pill-value" style="color: #38bdf8;">$1.42M</span>
+        <span>Remote Scaling Cohorts:</span>
+        <span class="kpi-pill-value">28 New Hires Active</span>
+      </div>
+      <div class="kpi-pill-item">
+        <span>HIPAA / FERPA Gate:</span>
+        <span class="kpi-pill-value" style="color: #38bdf8;">100% Attested</span>
       </div>
     </div>
   </section>
@@ -1556,16 +1470,20 @@
       </div>
       <div class="brand-title-box">
         <div class="brand-title">
-          HITL Incident Triage
-          <span class="brand-pill">Enterprise AI SOC</span>
+          Ajaia IT Operations Hub
+          <span class="brand-pill">AI-Native ITSM</span>
         </div>
-        <div class="brand-subtitle">Evidence-Backed Human-In-The-Loop Autonomous Operations</div>
+        <div class="brand-subtitle">Scalable IT Ticketing, Multi-Region Remote Teams &amp; Security Governance</div>
       </div>
     </a>
     <div class="header-actions">
+      <button type="button" class="btn btn-secondary btn-sm" onclick="openModal('archModal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        System Specs &amp; SLAs
+      </button>
       <button type="button" class="btn btn-ghost-ai btn-sm" onclick="triggerThreatSimulation()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Simulate Live Threat Stream
+        Simulate Live Telemetry
       </button>
       <button type="button" class="btn btn-secondary btn-sm" onclick="exportDataPackage()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1573,7 +1491,7 @@
       </button>
       <button type="button" class="btn btn-secondary btn-sm" onclick="openModal('intakeModal')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        New Intake
+        + Submit Ticket
       </button>
       <button type="button" class="btn btn-secondary btn-sm" onclick="resetDemoData()" title="Reset to initial state">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
@@ -1594,9 +1512,9 @@
         <span class="pulse-dot green"></span> Zero-Trust Human Attestation Active
       </span>
       <span>&bull;</span>
-      <span>Dual-Model Guardrails: NeMo &amp; LlamaGuard Verified</span>
+      <span>HIPAA Safe-Harbor &amp; FERPA Data Guardrails: Enforced</span>
       <span>&bull;</span>
-      <span>Immutable Local Audit Chaining</span>
+      <span>Multi-Region Provisioning: US, EMEA, APAC</span>
     </div>
     <div>
       <span>Ajaia Assessment Prototype &bull; Candidate: Bikram Sarkar &bull; Built October 2026</span>
@@ -1604,10 +1522,101 @@
   </footer>
 
   <!-- =====================================================================
-       MODALS & SLIDE-OVER PANELS
-       ===================================================================== -->
+       MODALS & ARCHITECTURAL SPECS
+       ===================================================================== */
+  -->
 
-  <!-- Explainable AI (XAI) & RAG Reasoning Chain Drawer -->
+  <!-- Full IT Ticketing System Architecture & SLA Specifications Modal -->
+  <div class="modal-backdrop" id="archModal">
+    <div class="modal-dialog" style="max-width: 860px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          Ajaia IT Ticketing System Design &amp; Architecture (Assessment Submission)
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeModal('archModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="line-height: 1.6; color: #cbd5e1;">
+        <p>
+          This design addresses Ajaia’s rapid scaling challenges: <strong>onboarding 25+ team members</strong>, <strong>managing multiple AI systems &amp; LLM access</strong>, <strong>safeguarding sensitive healthcare (HIPAA) &amp; education (FERPA) data</strong>, and <strong>supporting multi-region remote teams</strong>.
+        </p>
+
+        <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px;">
+          <h4 style="color: #93c5fd; font-size: 13.5px; margin-bottom: 6px;">1. Intake Channels (How Tickets are Submitted)</h4>
+          <ul style="padding-left: 18px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+            <li><strong>Slack / Teams Bot (<code>#it-helpdesk</code>):</strong> Conversational Slack bot parses requests using natural language NLP, extracts user role/region, and provides instant Tier-0 self-service answers or creates structured tickets.</li>
+            <li><strong>Self-Service Employee Portal:</strong> Web form with role-based dynamic fields (e.g. LLM API Key Request, HIPAA Data Project Access, Hardware/MDM Support).</li>
+            <li><strong>Email Forwarding (<code>support@ajaia.io</code>):</strong> Ingests external partner, vendor, or contractor inquiries into the unified queue.</li>
+            <li><strong>Automated Telemetry &amp; Compliance Webhooks:</strong> Automated triggers from AWS GuardDuty, Google Workspace DLP (HIPAA PHI alerts), and HRIS (BambooHR onboarding/offboarding sync).</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px;">
+          <h4 style="color: #c084fc; font-size: 13.5px; margin-bottom: 6px;">2. Categorization, Prioritization &amp; SLAs</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-medium); text-align: left; color: var(--text-muted); font-family: var(--font-mono);">
+                <th style="padding: 6px 0;">Priority</th>
+                <th>Definition &amp; Example Scenario</th>
+                <th>Target Response</th>
+                <th>Target Resolution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 0; color: #f43f5e; font-weight: bold; font-family: var(--font-mono);">P1 - Critical</td>
+                <td>Active breach, HIPAA PHI leak, production AI API outage</td>
+                <td style="font-family: var(--font-mono);">&lt; 15 mins</td>
+                <td style="font-family: var(--font-mono);">&lt; 1 hour</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 0; color: #f59e0b; font-weight: bold; font-family: var(--font-mono);">P2 - High</td>
+                <td>Blocked onboarding cohort, production LLM rate-limit spike</td>
+                <td style="font-family: var(--font-mono);">&lt; 1 hour</td>
+                <td style="font-family: var(--font-mono);">&lt; 4 hours</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; font-family: var(--font-mono);">P3 - Medium</td>
+                <td>Standard software license, single remote user VPN, FERPA review</td>
+                <td style="font-family: var(--font-mono);">&lt; 4 hours</td>
+                <td style="font-family: var(--font-mono);">&lt; 24 hours</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold; font-family: var(--font-mono);">P4 - Low</td>
+                <td>General equipment request, documentation query, non-urgent</td>
+                <td style="font-family: var(--font-mono);">&lt; 8 hours</td>
+                <td style="font-family: var(--font-mono);">&lt; 72 hours</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px;">
+          <h4 style="color: #38bdf8; font-size: 13.5px; margin-bottom: 6px;">3. Routing &amp; Assignment Rules</h4>
+          <ul style="padding-left: 18px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+            <li><strong>Tier 0 (AI Auto-Resolve):</strong> Standard password resets, approved SaaS access grants, and knowledge-base FAQs are resolved autonomously (41.8% deflection).</li>
+            <li><strong>Clinical SecOps &amp; Compliance Queue:</strong> Any ticket containing healthcare PHI, HIPAA tags, or education FERPA datasets routes to Compliance Specialists with mandatory human review.</li>
+            <li><strong>Identity &amp; Remote MDM Queue:</strong> Cohort onboarding batches auto-assigned based on timezone (US, EMEA, APAC) to regional IT leads.</li>
+            <li><strong>AI Platform Engineering Queue:</strong> LLM rate limit adjustments, fine-tuning infrastructure requests, and API credential management.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px;">
+          <h4 style="color: #34d399; font-size: 13.5px; margin-bottom: 6px;">4. How AI is Used to Reduce Workload (HITL Operations)</h4>
+          <ul style="padding-left: 18px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+            <li><strong>Intelligent Triage &amp; Redaction:</strong> Automatically extracts symptoms, checks PII/PHI redaction, categorizes ticket, and sets priority in &lt; 2 seconds.</li>
+            <li><strong>Copilot Suggested Resolution:</strong> Pre-drafts a polite, complete response to the user and formulates ready-to-run automation scripts (Okta SCIM, Jamf MDM, AWS CLI).</li>
+            <li><strong>Human-in-the-Loop Safeguard:</strong> IT Manager reviews the pre-drafted response and commands, tweaks if necessary, and executes with a single click.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('archModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Explainable AI (XAI) Drawer -->
   <div class="modal-backdrop" id="xaiDrawer">
     <div class="modal-dialog" style="max-width: 780px;">
       <div class="modal-header">
@@ -1626,131 +1635,93 @@
     </div>
   </div>
 
-  <!-- Limitations & Production Architecture Blueprint Modal -->
-  <div class="modal-backdrop" id="limitationsModal">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Enterprise Production Architecture Blueprint (AI Consultant Advisory)
-        </div>
-        <button type="button" class="modal-close-btn" onclick="closeModal('limitationsModal')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p style="color: #cbd5e1; line-height: 1.6;">
-          <strong>Executive Note:</strong> This frontend illustrates human-in-the-loop operational design principles for AI-assisted incident response. In production enterprise deployments, human-gated AI systems require six foundational infrastructure layers:
-        </p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
-          <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 6px;">
-            <div style="color: #93c5fd; font-weight: 700; margin-bottom: 4px;">1. Identity &amp; RBAC Separation</div>
-            <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.5;">OIDC/SAML2 SSO with multi-party authorization for destructive commands (four-eyes principle).</p>
-          </div>
-          <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 6px;">
-            <div style="color: #93c5fd; font-weight: 700; margin-bottom: 4px;">2. Immutable WORM Audit Vault</div>
-            <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.5;">Cryptographic hash-chaining to AWS S3 Glacier Object Lock to satisfy SOC2 CC6.8 and SEC disclosure rules.</p>
-          </div>
-          <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 6px;">
-            <div style="color: #93c5fd; font-weight: 700; margin-bottom: 4px;">3. Privacy &amp; PII Redaction Pipeline</div>
-            <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.5;">Presidio/NER-based automated redaction scrubbing credentials, tokens, and PHI before inference.</p>
-          </div>
-          <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 6px;">
-            <div style="color: #93c5fd; font-weight: 700; margin-bottom: 4px;">4. Connector Least-Privilege</div>
-            <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.5;">Granular IAM service principles scoped solely to diagnostic &amp; targeted revocation actions.</p>
-          </div>
-          <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 6px;">
-            <div style="color: #93c5fd; font-weight: 700; margin-bottom: 4px;">5. Idempotent Two-Phase Execution</div>
-            <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.5;">Automated dry-run simulation and automated circuit-breaker rollbacks upon telemetry degradation.</p>
-          </div>
-          <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 6px;">
-            <div style="color: #93c5fd; font-weight: 700; margin-bottom: 4px;">6. Continuous Model Red-Teaming</div>
-            <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.5;">Adversarial prompt injection mitigation and automated drift detection for security playbooks.</p>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('limitationsModal')">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Incident Intake Modal -->
+  <!-- Submit Ticket Modal -->
   <div class="modal-backdrop" id="intakeModal">
     <div class="modal-dialog">
       <div class="modal-header">
         <div class="modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-          Inject Synthetic Incident (Telemetry Intake)
+          Submit IT Service Ticket (Multi-Channel Intake)
         </div>
         <button type="button" class="modal-close-btn" onclick="closeModal('intakeModal')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label" for="intakePreset">Quick-Fill Enterprise Threat Template</label>
+          <label class="form-label" for="intakePreset">Quick-Fill Ajaia Scenario Template</label>
           <select id="intakePreset" class="form-select" onchange="applyIntakePreset(this.value)">
-            <option value="">-- Select scenario template --</option>
-            <option value="preset-creds">Exposed AWS Secret Access Key in Jenkins Build Logs</option>
-            <option value="preset-share">Public S3 Bucket with Customer Invoices &amp; Tax IDs</option>
-            <option value="preset-ai">Unsanctioned AI Code Assistant Browser Plugin Egress</option>
-            <option value="preset-onboarding">Terminated Contractor Retaining Active Slack &amp; Okta SSO</option>
+            <option value="">-- Choose Ajaia operational scenario --</option>
+            <option value="preset-onboarding">Scenario: Onboard 6 Remote Clinicians (APAC Cohort, HIPAA Training + Okta SSO)</option>
+            <option value="preset-ai">Scenario: Claude 3.5 Sonnet &amp; GPT-4o Enterprise API Keys for NLP Research</option>
+            <option value="preset-hipaa">Scenario: Healthcare Clinic Dataset PHI Exposure Alert (Hospital Partner)</option>
+            <option value="preset-ferpa">Scenario: Education LMS Analytics Integration Review (FERPA Compliance)</option>
+            <option value="preset-creds">Scenario: Exposed AWS Secret Access Key in Jenkins Logs</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="intakeTitle">Incident Title</label>
-          <input type="text" id="intakeTitle" class="form-input" placeholder="e.g. Critical: Database Credentials Leaked in Commit" required>
-        </div>
         <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="intakeChannel">Intake Channel</label>
+            <select id="intakeChannel" class="form-select">
+              <option value="Slack Bot (#it-helpdesk)">Slack Bot (#it-helpdesk)</option>
+              <option value="Employee Self-Service Portal">Employee Self-Service Portal</option>
+              <option value="Email (support@ajaia.io)">Email (support@ajaia.io)</option>
+              <option value="AI Conversational Intake">AI Conversational Intake</option>
+              <option value="Telemetry / Security Webhook">Telemetry / Security Webhook</option>
+            </select>
+          </div>
           <div class="form-group">
             <label class="form-label" for="intakeCategory">Category</label>
             <select id="intakeCategory" class="form-select">
-              <option value="Exposed API Credentials">Exposed API Credentials</option>
-              <option value="Broad Sharing Permissions">Broad Sharing Permissions</option>
-              <option value="Unapproved AI Integrations">Unapproved AI Integrations</option>
-              <option value="Onboarding Gaps">Onboarding Gaps</option>
+              <option value="Onboarding &amp; Identity (25+ Scaling)">Onboarding &amp; Identity (25+ Scaling)</option>
+              <option value="AI Systems &amp; LLM Operations">AI Systems &amp; LLM Operations</option>
+              <option value="Healthcare PHI &amp; HIPAA">Healthcare PHI &amp; HIPAA</option>
+              <option value="Education FERPA &amp; Data Privacy">Education FERPA &amp; Data Privacy</option>
+              <option value="Hardware &amp; Remote MDM">Hardware &amp; Remote MDM</option>
+              <option value="Security &amp; Cloud Operations">Security &amp; Cloud Operations</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="intakeSeverity">Severity</label>
-            <select id="intakeSeverity" class="form-select">
-              <option value="P1">P1 - Critical (Immediate SLA)</option>
-              <option value="P2">P2 - High (Action Within 2 Hours)</option>
-              <option value="P3" selected>P3 - Medium (Action Within 24 Hours)</option>
-              <option value="P4">P4 - Low (Informational)</option>
-            </select>
-          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="intakeTitle">Ticket Title / Summary</label>
+          <input type="text" id="intakeTitle" class="form-input" placeholder="e.g. Request: Access to GPT-4o Clinical Fine-Tuning Pipeline" required>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="intakeEntity">Affected Entity / Asset</label>
-            <input type="text" id="intakeEntity" class="form-input" placeholder="e.g. user: m.morales@ajaia.internal or s3://vault" required>
+            <label class="form-label" for="intakeSeverity">Priority &amp; Auto-SLA</label>
+            <select id="intakeSeverity" class="form-select">
+              <option value="P1">P1 - Critical (Target SLA: 1h Resolve)</option>
+              <option value="P2" selected>P2 - High (Target SLA: 4h Resolve)</option>
+              <option value="P3">P3 - Medium (Target SLA: 24h Resolve)</option>
+              <option value="P4">P4 - Low (Target SLA: 72h Resolve)</option>
+            </select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="intakeSource">Detection Source</label>
-            <input type="text" id="intakeSource" class="form-input" placeholder="e.g. Datadog SIEM / GitGuardian" required>
+            <label class="form-label" for="intakeEntity">Requester / Affected Entity</label>
+            <input type="text" id="intakeEntity" class="form-input" placeholder="e.g. Dr. Emily Zhao (Clinical Ops, Singapore)" required>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label" for="intakeDescription">Description &amp; Threat Symptoms</label>
-          <textarea id="intakeDescription" class="form-textarea" rows="2" placeholder="Summary of telemetry and threat observations..." required></textarea>
+          <label class="form-label" for="intakeDescription">Ticket Description &amp; Requirements</label>
+          <textarea id="intakeDescription" class="form-textarea" rows="2" placeholder="Details of the request or problem..." required></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label" for="intakeEvidence">Raw Evidence Telemetry Log</label>
-          <textarea id="intakeEvidence" class="form-textarea" rows="3" style="font-family: var(--font-mono); font-size: 11px;" placeholder="[LOG] Raw payload data..."></textarea>
+          <label class="form-label" for="intakeEvidence">Initial Telemetry / Slack Snippet / Log</label>
+          <textarea id="intakeEvidence" class="form-textarea" rows="3" style="font-family: var(--font-mono); font-size: 11px;" placeholder="[TRANSCRIPT or LOG DATA]"></textarea>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="closeModal('intakeModal')">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="submitIntakeForm()">Synthesize &amp; Queue Case</button>
+        <button type="button" class="btn btn-primary" onclick="submitIntakeForm()">Synthesize &amp; Queue Ticket</button>
       </div>
     </div>
   </div>
 
-  <!-- Simulated Orchestration Sandbox Modal -->
+  <!-- Orchestration Sandbox Modal -->
   <div class="modal-backdrop" id="execModal">
     <div class="modal-dialog">
       <div class="modal-header">
         <div class="modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Orchestration Sandbox: Automated Remediation Dispatch
+          Orchestration Sandbox: Automated IT Execution Dispatch
         </div>
         <button type="button" class="modal-close-btn" onclick="closeModal('execModal')">&times;</button>
       </div>
@@ -1758,7 +1729,7 @@
         <!-- Live terminal -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="closeModal('execModal'); renderDetailView(state.currentIncidentId);">View Updated Audit Record</button>
+        <button type="button" class="btn btn-primary" onclick="closeModal('execModal'); renderDetailView(state.currentIncidentId);">View Updated Ticket Record</button>
       </div>
     </div>
   </div>
@@ -1768,19 +1739,19 @@
     <div class="modal-dialog" style="max-width: 500px;">
       <div class="modal-header">
         <div class="modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="10" y2="8"/><line x1="14" y1="8" x2="14" y2="8"/><line x1="18" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="10" y1="12" x2="10" y2="12"/><line x1="14" y1="12" x2="14" y2="12"/><line x1="18" y1="12" x2="18" y2="12"/><line x1="8" y1="16" x2="16" y2="16"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="10" y2="8"/><line x1="14" y1="8" x2="14" y2="8"/><line x1="18" y1="8" x2="18" y2="8"/></svg>
           Keyboard Hotkeys &amp; Power Navigation
         </div>
         <button type="button" class="modal-close-btn" onclick="closeModal('shortcutsModal')">&times;</button>
       </div>
       <div class="modal-body">
         <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
-          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">J / K</td><td style="color: var(--text-secondary);">Navigate Down / Up incident queue</td></tr>
-          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">Enter</td><td style="color: var(--text-secondary);">Open highlighted incident</td></tr>
-          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">1 / 2 / 3</td><td style="color: var(--text-secondary);">Switch between AI, Evidence, and Gatekeeper tabs</td></tr>
-          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">A</td><td style="color: var(--text-secondary);">Approve remediation plan</td></tr>
-          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">R</td><td style="color: var(--text-secondary);">Request changes</td></tr>
-          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">X</td><td style="color: var(--text-secondary);">Reject / dismiss case</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">J / K</td><td style="color: var(--text-secondary);">Navigate Down / Up ticket queue</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">Enter</td><td style="color: var(--text-secondary);">Open highlighted ticket</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">1 / 2 / 3</td><td style="color: var(--text-secondary);">Switch AI Triage, Evidence, and Gatekeeper tabs</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">A</td><td style="color: var(--text-secondary);">Approve &amp; dispatch remediation</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">R</td><td style="color: var(--text-secondary);">Request changes / re-route</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">X</td><td style="color: var(--text-secondary);">Reject / dismiss ticket</td></tr>
           <tr style="border-bottom: 1px solid var(--border-subtle);"><td style="padding: 8px 0; font-family: var(--font-mono); color: #93c5fd;">Esc</td><td style="color: var(--text-secondary);">Return to queue / close modals</td></tr>
         </table>
       </div>
@@ -1798,496 +1769,469 @@
        ===================================================================== */
   -->
   <script>
-    const STORAGE_KEY_INCIDENTS = "HITL_INCIDENTS_AJAIA_V2";
-    const STORAGE_KEY_AUDIT = "HITL_AUDIT_AJAIA_V2";
+    const STORAGE_KEY_INCIDENTS = "AJAIA_IT_TICKETS_V3";
+    const STORAGE_KEY_AUDIT = "AJAIA_IT_AUDIT_V3";
 
+    /* Realistic tickets reflecting Ajaia's exact operational scaling scenario */
     const DEFAULT_INCIDENTS = [
       {
-        id: "INC-8041",
-        title: "Production OpenAI API Key Leaked in Public GitHub Repository",
+        id: "TICK-1041",
+        title: "Urgent: Unencrypted Healthcare PHI Dataset Exported to Shared Drive (Hospital Partner)",
         severity: "P1",
-        category: "Exposed API Credentials",
-        source: "GitHub Secret Scanning & GitGuardian Webhook",
-        affectedEntity: "repo: ajaia-org/customer-portal-v2 (David Miller)",
+        category: "Healthcare PHI & HIPAA",
+        channel: "Telemetry / Security Webhook",
+        source: "Google Workspace DLP & Cloud Audit Logs",
+        affectedEntity: "Google Drive: 'Ajaia_Clinic_Patient_Cohorts_v2.csv' (Dr. Sarah Jenkins)",
         created: "2026-10-11T14:32:00Z",
         approvalStatus: "Pending Review",
-        description: "GitGuardian and GitHub Secret Scanning detected an active OpenAI Enterprise API key committed to public branch feature/support-bot in customer-portal-v2. Exposure window is ~18 minutes. Threat telemetry observed 4,200 token calls from unrecognized Tor exit node IPs.",
+        slaTarget: "Target: 1h Resolve (38m remaining)",
+        slaUrgent: true,
+        routedQueue: "Clinical SecOps & HIPAA Compliance (Auto-routed by AI via PHI classification)",
+        description: "Google Workspace DLP flagged an internal Google Drive sheet containing 248 patient identifiers, diagnosis ICD-10 codes, and clinical evaluation notes. Access modified to 'Anyone with link can view'. Threat telemetry detected 2 anonymous external downloads.",
         cisoImpact: {
-          financialExposure: "$120,000 estimated API quota surge risk",
-          secDisclosureTrigger: "No (Non-material breach, isolated to API gateway)",
-          regulatorySla: "24 Hours (Internal Security Policy)",
-          stakeholderAction: "Notify VP of Engineering & rotate all AWS Secrets Manager parameters"
+          financialExposure: "$450,000 potential HIPAA breach notification liability",
+          secDisclosureTrigger: "Mandatory if data confirmed exfiltrated",
+          regulatorySla: "72 Hours (HIPAA Breach Notification Rule)",
+          stakeholderAction: "Notify Chief Privacy Officer & Hospital Partner Compliance Lead"
         },
         aiSummary: {
-          model: "Ajaia-SecOps-Triage (v4.2)",
+          model: "Ajaia-IT-Copilot (v4.2)",
           confidence: 96,
-          confidenceRationale: "High confidence due to direct cryptographic match against active OpenAI token pattern and concurrent anomalous token billing spikes in SIEM telemetry.",
+          confidenceRationale: "High confidence due to direct DLP regex match on medical record numbers (MRNs) and active anonymous external download records.",
           riskLevel: "HIGH RISK",
           factorWeights: {
-            "Pattern Match Determinism": "99%",
-            "Egress Telemetry Correlation": "96%",
-            "Blast Radius Certainty": "94%",
-            "Rollback Feasibility": "98%"
-          },
-          cotTrace: [
-            "1. Extracted secret string 'sk-proj-9mF0x...' matching OpenAI live project format.",
-            "2. Correlated with GitHub pusher identity 'd.miller@ajaia.internal' and commit a7f9c2d.",
-            "3. Cross-referenced Cloudflare Gateway logs: Tor exit node 185.220.101.4 made 4,200 token queries within 8 minutes of commit.",
-            "4. Checked automated kill-switch runbook: Key rotation has zero impact on core billing, minor latency on customer bot.",
-            "5. Formulated two-phase containment: (a) rotate credential, (b) git-filter-repo commit sanitization."
-          ],
-          executiveSummary: "Production AI API key with unrestricted billing tier exposed in a publicly accessible GitHub commit. External automated scrapers have already begun issuing programmatic queries. Immediate credential revocation, repo sanitization, and token usage auditing required.",
-          rootCause: "Hardcoded credential committed directly to repository rather than sourcing from AWS Secrets Manager during local developer debugging.",
-          impactScope: [
-            "OpenAI Enterprise Account (Monthly limit: $10,000)",
-            "Repository: ajaia-org/customer-portal-v2",
-            "Downstream Support Bot Microservice",
-            "Compliance: SOC2 CC6.1 (Logical Access Controls)"
-          ],
-          actionPlan: [
-            "Immediately revoke and rotate the exposed API key via OpenAI Organization Admin API.",
-            "Deploy replacement secret to AWS Secrets Manager (/prod/customer-portal/openai-key).",
-            "Run git-filter-repo to purge commit a7f9c2d from git history and force push.",
-            "Query OpenAI usage logs to identify whether proprietary prompt templates or customer data were leaked."
-          ],
-          commands: [
-            {
-              id: "cmd-8041-1",
-              label: "Audit Recent Token Consumption",
-              cmd: 'curl -s -H "Authorization: Bearer $OPENAI_ADMIN" "https://api.openai.com/v1/organization/usage?date=today"',
-              risk: "SAFE",
-              selected: true,
-              description: "Read-only query to measure token spike and extract caller IP addresses."
-            },
-            {
-              id: "cmd-8041-2",
-              label: "Revoke and Rotate Compromised API Key",
-              cmd: "python3 -m ajaia_sec.creds rotate --provider openai --key-id sk-proj-9mF0x... --env production --auto-update-secrets-manager",
-              risk: "NEEDS APPROVAL",
-              selected: true,
-              description: "Revokes token in OpenAI and writes fresh rotated secret to AWS Secrets Manager."
-            },
-            {
-              id: "cmd-8041-3",
-              label: "Purge Commit from Git Remote History",
-              cmd: "gh repo clone ajaia-org/customer-portal-v2 /tmp/repo && cd /tmp/repo && git filter-repo --invert-paths --path server/config/openai.js && git push origin --force --all",
-              risk: "HIGH RISK",
-              selected: false,
-              description: "Destructive git rewrite to eliminate token string from all public commit objects."
-            }
-          ],
-          rollbackPlan: "In the event of application startup failure after key rotation, activate proxy fallback model cache and revert to previous secret version in Secrets Manager."
-        },
-        evidence: [
-          {
-            id: "ev-8041-1",
-            title: "Git Commit Diff Patch",
-            source: "GitHub Enterprise Webhook",
-            timestamp: "2026-10-11T14:32:15Z",
-            hash: "sha256:4d8a1e2f93bc67e0...",
-            content: `commit a7f9c2d8471b0e32049e7a83301fbdf929e013a2
-Author: David Miller <d.miller@ajaia.internal>
-Date:   Sun Oct 11 14:31:40 2026 -0400
-
-    feat: add streaming chat client for customer support bot
-
-diff --git a/server/config/openai.js b/server/config/openai.js
---- a/server/config/openai.js
-+++ b/server/config/openai.js
-@@ -1,4 +1,7 @@
--const apiKey = process.env.OPENAI_API_KEY;
-+// FIXME: temporary hardcode for local dev testing
-+const apiKey = "sk-proj-9mF0xKl84b901Zl9xT209Yw1xKv99824nL";
-+export const openaiClient = new OpenAI({ apiKey });`
-          },
-          {
-            id: "ev-8041-2",
-            title: "Tor Egress Telemetry Log",
-            source: "Datadog / Cloudflare Gateway SIEM",
-            timestamp: "2026-10-11T14:40:02Z",
-            hash: "sha256:7b1028f09ccca4...",
-            content: `[2026-10-11T14:38:12Z] SRC_IP: 185.220.101.4 (TOR_EXIT_NODE_DE) -> DEST: api.openai.com:443
-HTTP_METHOD: POST /v1/chat/completions
-AUTH_HEADER: Bearer sk-proj-9mF0x...
-TOKENS_REQUESTED: 1,400
-STATUS: 200 OK
-
-[2026-10-11T14:39:45Z] SRC_IP: 185.220.101.4 (TOR_EXIT_NODE_DE) -> DEST: api.openai.com:443
-HTTP_METHOD: POST /v1/chat/completions
-AUTH_HEADER: Bearer sk-proj-9mF0x...
-TOKENS_REQUESTED: 2,800
-STATUS: 200 OK`
-          }
-        ],
-        checklist: [
-          { id: "chk-1", label: "Source evidence verified against GitHub commit tree", checked: true },
-          { id: "chk-2", label: "Confirmed credential validity in OpenAI developer dashboard", checked: true },
-          { id: "chk-3", label: "Blast radius assessed: No customer data in training prompts", checked: false },
-          { id: "chk-4", label: "Remediation plan reviewed for customer bot availability", checked: false }
-        ],
-        timeline: [
-          { time: "14:31:40", title: "Commit Pushed", desc: "Developer d.miller pushed commit a7f9c2d to feature/support-bot", actor: "System", type: "system" },
-          { time: "14:32:00", title: "Secret Detected", desc: "GitGuardian webhook flagged exposed production token pattern", actor: "GitGuardian", type: "warning" },
-          { time: "14:32:05", title: "AI Triage Ingestion", desc: "Ajaia Triage Bot ingested incident, parsed diff, generated confidence score (96%)", actor: "AI Bot", type: "ai" },
-          { time: "14:40:02", title: "Egress Alert Correlated", desc: "SIEM correlated 4,200 token calls from German Tor exit node", actor: "Datadog SIEM", type: "warning" }
-        ]
-      },
-      {
-        id: "INC-8042",
-        title: "Confidential Payroll & Equity Sheet Shared with 'Anyone with Link'",
-        severity: "P2",
-        category: "Broad Sharing Permissions",
-        source: "Google Workspace Security Center / DLP Monitor",
-        affectedEntity: "Google Drive: 'Ajaia_Q4_Compensation_and_Equity_Grants.xlsx'",
-        created: "2026-10-11T13:45:00Z",
-        approvalStatus: "Pending Review",
-        description: "Google Workspace DLP flagged an internal compensation sheet containing 142 employee names, SSNs, and executive equity grant percentages. Access control list modified to 'Anyone on internet with link can view and download'. 3 anonymous external downloads detected.",
-        cisoImpact: {
-          financialExposure: "$450,000 potential breach liability & state notification costs",
-          secDisclosureTrigger: "Mandatory if material executive compensation is leaked to press",
-          regulatorySla: "72 Hours (GDPR / State Data Privacy Statutes)",
-          stakeholderAction: "Notify Chief Legal Officer & Head of People Ops"
-        },
-        aiSummary: {
-          model: "Ajaia-SecOps-Triage (v4.2)",
-          confidence: 94,
-          confidenceRationale: "High confidence based on direct Google Drive Admin Audit log match and DLP regex triggers for SSN patterns.",
-          riskLevel: "NEEDS APPROVAL",
-          factorWeights: {
-            "DLP Rule Certainty": "98%",
-            "Access Log Correlation": "95%",
-            "PII Regex Match Precision": "99%",
+            "PHI Classification Match": "99%",
+            "Access Log Correlation": "96%",
+            "HIPAA Compliance Scope": "98%",
             "ACL Reversibility": "100%"
           },
           cotTrace: [
-            "1. Ingested DLP match on file 'Ajaia_Q4_Compensation_and_Equity_Grants.xlsx'.",
-            "2. Identified 142 SSN regex matches and C-level equity percentages.",
-            "3. Queried Google Workspace Drive Audit: Owner s.jenkins switched ACL to 'anyoneWithLink' at 13:42:19Z.",
-            "4. Detected 3 external GET downloads from non-corporate ISPs (Cloudflare Consumer & T-Mobile).",
-            "5. Selected least-destructive containment: Strip 'anyoneWithLink' while retaining owner access to preserve work in progress."
+            "1. Ingested DLP alert on patient dataset exported by Clinical Ops.",
+            "2. Identified 248 MRNs and clinical diagnosis codes without BAA-compliant encryption.",
+            "3. Detected anonymous external GET requests from non-corporate IPs.",
+            "4. Formulated least-destructive containment: Revert document link to restricted domain group, revoke public link token, and pull forensic download IP logs."
           ],
-          executiveSummary: "Confidential HR document exposed to the public internet via Google Drive link sharing. Three anonymous IP downloads recorded. Revert public access immediately, invalidate active link tokens, and export download forensics.",
-          rootCause: "Accidental selection of 'Anyone with the link' option when preparing to share file with external executive compensation auditor.",
+          executiveSummary: "Sensitive patient clinical data exposed publicly via Google Drive link sharing. Two anonymous downloads recorded. Revert public permissions immediately, revoke link tokens, and export download forensics.",
+          rootCause: "Accidental selection of 'Anyone with the link' option when preparing to share file with outside clinical research fellow.",
           impactScope: [
-            "142 Employee Records (Names, Tax IDs, Base Salaries)",
-            "Executive Equity Cap Table",
-            "Drive Folder: HR-Executive-Vault",
-            "Compliance: SOC2 CC6.3 & State PII Privacy Statutes"
+            "248 Patient Health Records (MRN, Diagnosis Codes)",
+            "Clinical Partner Hospital BAA Agreement",
+            "Compliance: HIPAA Security Rule (45 CFR § 164.312)"
           ],
+          suggestedReply: "Hi Dr. Jenkins, IT Security detected that 'Ajaia_Clinic_Patient_Cohorts_v2.csv' was shared with public link access. Because this contains HIPAA-regulated clinical identifiers, we have restricted access to the verified Clinical Ops group. If you need external sharing with the partner fellow, please use our encrypted Box Health vault with 2FA enforcement.",
           actionPlan: [
-            "Revoke 'anyoneWithLink' ACL on document ID 1z9KfM_88xQ_CompQ4.",
-            "Revert file permissions to restricted group: hr-leadership@ajaia.internal.",
-            "Extract IP addresses and timestamps of the 3 anonymous download sessions.",
-            "Assist People Ops team with sending secure, authenticated share link to auditor."
+            "Revoke 'anyoneWithLink' ACL on document ID 1z9KfM_ClinicQ4.",
+            "Revert file permissions to restricted group: clinical-ops@ajaia.internal.",
+            "Extract IP addresses and timestamps of the anonymous download sessions."
           ],
           commands: [
             {
-              id: "cmd-8042-1",
+              id: "cmd-1041-1",
               label: "Inspect Current File ACLs",
-              cmd: 'gam user s.jenkins@ajaia.internal show drivefileacl "1z9KfM_88xQ_CompQ4" format json',
+              cmd: 'gam user s.jenkins@ajaia.internal show drivefileacl "1z9KfM_ClinicQ4" format json',
               risk: "SAFE",
               selected: true,
               description: "Read-only inspection of active drive permissions."
             },
             {
-              id: "cmd-8042-2",
+              id: "cmd-1041-2",
               label: "Delete Public Link Permission",
-              cmd: 'gam user s.jenkins@ajaia.internal delete drivefileacl "1z9KfM_88xQ_CompQ4" "anyoneWithLink"',
+              cmd: 'gam user s.jenkins@ajaia.internal delete drivefileacl "1z9KfM_ClinicQ4" "anyoneWithLink"',
               risk: "NEEDS APPROVAL",
               selected: true,
               description: "Removes public link access while preserving direct owner permissions."
-            },
-            {
-              id: "cmd-8042-3",
-              label: "Export Download Forensics Log",
-              cmd: 'gam report drive user s.jenkins@ajaia.internal event download fileid "1z9KfM_88xQ_CompQ4" start "2026-10-11T13:40:00Z"',
-              risk: "SAFE",
-              selected: true,
-              description: "Pulls audit trail of downloader IP addresses and client user agents."
             }
           ],
-          rollbackPlan: "If authorized collaborator access is severed, re-grant domain-specific view access via Google Groups (hr-leadership@ajaia.internal)."
+          rollbackPlan: "Restore internal view access via Google Groups if legitimate clinic collaboration is interrupted."
         },
         evidence: [
           {
-            id: "ev-8042-1",
-            title: "Drive ACL Change Audit Record",
-            source: "Google Workspace Admin Audit Log",
-            timestamp: "2026-10-11T13:42:19Z",
-            hash: "sha256:1a84c832bb5e90...",
-            content: `{
-  "event": "change_user_access",
-  "actor": "s.jenkins@ajaia.internal",
-  "actor_role": "People Ops Specialist",
-  "doc_title": "Ajaia_Q4_Compensation_and_Equity_Grants.xlsx",
-  "doc_id": "1z9KfM_88xQ_CompQ4",
-  "old_scope": "restricted_to_domain",
-  "new_scope": "anyone_with_link",
-  "new_role": "viewer",
-  "allow_download": true
-}`
-          },
-          {
-            id: "ev-8042-2",
-            title: "Anonymous Download Events",
-            source: "Google Workspace Drive Reports API",
-            timestamp: "2026-10-11T14:10:04Z",
-            hash: "sha256:90af231cb489...",
-            content: `EVENT 1: 2026-10-11T13:58:12Z | IP: 104.28.19.12 (Cloudflare Consumer IP) | UserAgent: Mozilla/5.0 (Macintosh)
-EVENT 2: 2026-10-11T14:02:44Z | IP: 172.56.21.90 (T-Mobile USA Mobile IP)   | UserAgent: Mozilla/5.0 (iPhone)
-EVENT 3: 2026-10-11T14:09:30Z | IP: 104.28.19.12 (Cloudflare Consumer IP) | UserAgent: Mozilla/5.0 (Macintosh)`
+            id: "ev-1041-1",
+            title: "DLP Incident Match & ACL Log",
+            source: "Google Workspace Security Center",
+            timestamp: "2026-10-11T14:32:15Z",
+            hash: "sha256:4d8a1e2f93bc67e0...",
+            content: `DLP POLICY TRIGGER: HIPAA_PHI_STRICT
+Matched Document: Ajaia_Clinic_Patient_Cohorts_v2.csv
+Actor: s.jenkins@ajaia.internal (Clinical Research Specialist)
+Matches: 248 Medical Record Numbers (MRN), 190 ICD-10 Diagnosis Codes
+Active ACL: anyoneWithLink (Role: Viewer, Download: Enabled)
+External Downloads Log:
+ - 2026-10-11T14:38:12Z | IP: 104.28.19.12 (External ISP)
+ - 2026-10-11T14:40:02Z | IP: 172.56.21.90 (Mobile ISP)`
           }
         ],
         checklist: [
-          { id: "chk-2-1", label: "Confirmed file contains unencrypted compensation/PII", checked: true },
-          { id: "chk-2-2", label: "Validated identity of owner: Sarah Jenkins (People Ops)", checked: true },
-          { id: "chk-2-3", label: "Anonymous IP forensic log pulled for security assessment", checked: false }
+          { id: "chk-1", label: "Confirmed file contains HIPAA-regulated patient data", checked: true },
+          { id: "chk-2", label: "Validated identity of owner: Dr. Sarah Jenkins (Clinical Ops)", checked: true },
+          { id: "chk-3", label: "Anonymous IP forensic log pulled for incident response report", checked: false },
+          { id: "chk-4", label: "Provided user with alternative secure BAA-compliant vault", checked: false }
         ],
         timeline: [
-          { time: "13:42:19", title: "Permission Changed", desc: "User s.jenkins updated doc ACL to 'anyone_with_link'", actor: "Google Workspace", type: "warning" },
-          { time: "13:45:00", title: "DLP Policy Triggered", desc: "Rule 'PII & Executive Comp' flagged 142 SSN/salary matches", actor: "Google DLP", type: "warning" },
-          { time: "13:58:12", title: "First External Download", desc: "Anonymous download recorded from IP 104.28.19.12", actor: "Drive Telemetry", type: "warning" },
-          { time: "14:15:00", title: "Incident Queued", desc: "Assigned to HITL queue for security review and remediation approval", actor: "HITL Triage", type: "ai" }
+          { time: "14:30:00", title: "File Shared", desc: "File shared via public link", actor: "Google Drive", type: "system" },
+          { time: "14:32:00", title: "DLP Rule Triggered", desc: "Flagged 248 PHI matches", actor: "Google DLP", type: "warning" },
+          { time: "14:32:05", title: "AI Triage Ingested", desc: "Classified P1 Critical; drafted containment scripts", actor: "Ajaia IT Bot", type: "ai" }
         ]
       },
       {
-        id: "INC-8043",
-        title: "Shadow AI Browser Extension Granted Full Mail & Calendar Scopes",
+        id: "TICK-1042",
+        title: "Batch Provisioning: Rapid Onboarding for 8 Remote Engineers (Cohort Q4-Week 2, APAC & EMEA)",
         severity: "P2",
-        category: "Unapproved AI Integrations",
-        source: "Google Workspace OAuth Monitor & CASB Alert",
-        affectedEntity: "User: r.chen@ajaia.internal (Head of Product) • App: 'QuickNotes AI Summarizer'",
-        created: "2026-10-11T12:15:00Z",
+        category: "Onboarding & Identity (25+ Scaling)",
+        channel: "Self-Service Employee Portal",
+        source: "HRIS BambooHR Onboarding Webhook",
+        affectedEntity: "8 New Hires across UK, Germany, and Singapore (Engineering & Clinical AI)",
+        created: "2026-10-11T13:15:00Z",
         approvalStatus: "Pending Review",
-        description: "Cloud Access Security Broker (CASB) detected an unauthorized OAuth token grant for third-party extension 'QuickNotes AI'. The app requested full mail.readonly, calendar.events, and drive.readonly scopes. Vendor domain was registered 18 days ago with no SOC2 certification and privacy policy permitting training on user content.",
+        slaTarget: "Target: 4h Resolve (2h 15m remaining)",
+        slaUrgent: false,
+        routedQueue: "IT Identity & Remote MDM Queue (Timezone-balanced routing)",
+        description: "BambooHR triggered batch onboarding event for Cohort Q4-Week 2. Requires Okta SSO account generation, GitHub team memberships, Jamf/Intune remote hardware MDM profile enrollment, and role-based zero-trust application baselines for 8 engineers.",
         cisoImpact: {
-          financialExposure: "Confidential product roadmap leak / Trade secret loss",
-          secDisclosureTrigger: "No (Third-party shadow tool, no external breach confirmed)",
-          regulatorySla: "Internal Governance SLA: 4 Hours",
-          stakeholderAction: "Provide executive with approved enterprise Gemini assistant license"
+          financialExposure: "Day-1 productivity loss ($18,400 daily cohort burn rate)",
+          secDisclosureTrigger: "No",
+          regulatorySla: "SOC2 CC6.2 (Formalized New Hire Access Controls)",
+          stakeholderAction: "Ensure all 8 remote devices enforce hardware FileVault encryption"
         },
         aiSummary: {
-          model: "Ajaia-SecOps-Triage (v4.2)",
-          confidence: 91,
-          confidenceRationale: "Verified active OAuth grant in Google Workspace directory and cross-referenced vendor against unvetted third-party software registry.",
+          model: "Ajaia-IT-Copilot (v4.2)",
+          confidence: 98,
+          confidenceRationale: "High confidence due to structured HRIS webhook match against approved Q4 engineering hiring plan.",
           riskLevel: "NEEDS APPROVAL",
           factorWeights: {
-            "OAuth Scope Breadth": "97%",
-            "Vendor Threat Profile": "94%",
-            "Data Exfiltration Risk": "89%",
-            "Revocation Impact": "99%"
+            "HRIS Schema Validation": "100%",
+            "Role-Based Access Mapping": "98%",
+            "MDM Enrollment Feasibility": "96%",
+            "License Quota Availability": "98%"
           },
           cotTrace: [
-            "1. Received OAuth authorization event from user r.chen@ajaia.internal.",
-            "2. Scopes granted include full gmail.readonly and calendar.events.",
-            "3. Queried WHOIS / Domain ThreatDB: quicknotes-ai.io registered 18 days ago via Panama proxy.",
-            "4. Privacy policy analysis: Vendor claims perpetual license to user text inputs for foundation model pre-training.",
-            "5. Recommended actions: Revoke token immediately and add Client ID to domain-wide blocklist."
+            "1. Ingested BambooHR batch webhook for 8 remote engineers.",
+            "2. Parsed department profiles: 5 Backend Engineers (London), 3 Clinical NLP Engineers (Berlin & Singapore).",
+            "3. Checked SaaS license pools: Okta (14 seats available), GitHub Enterprise (20 seats available).",
+            "4. Generated idempotent SCIM provisioning command and pre-drafted welcome onboarding email with temporary 1Password vault links."
           ],
-          executiveSummary: "Unvetted shadow AI tool installed by executive product lead granted excessive read permissions into corporate emails and roadmap calendars. Vendor lacks enterprise security certifications. Revoke OAuth grant, block app domain-wide, and offer vetted enterprise AI alternative.",
-          rootCause: "Employee bypassed IT software procurement and installed unvetted Chrome marketplace extension for meeting summarization.",
+          executiveSummary: "Batch onboarding event for 8 remote engineering hires. Validated license inventory and pre-configured role-based security baselines. Ready for 1-click provisioning and MDM dispatch.",
+          rootCause: "Planned rapid organizational scaling across remote timezones.",
           impactScope: [
-            "Executive Gmail Inbox & Drafts (r.chen@ajaia.internal)",
-            "Internal Strategic Product Roadmap Calendars",
-            "Compliance: SOC2 CC6.6 (Logical Boundaries & Software Governance)"
+            "8 Okta User Accounts",
+            "GitHub Org: ajaia-org (Teams: backend-eng, clinical-nlp)",
+            "Jamf/Intune MDM Fleet Enrollment",
+            "SOC2 CC6.2 New Hire Compliance Baseline"
           ],
+          suggestedReply: "Welcome to Ajaia! Your corporate Okta SSO account has been provisioned. Please check your personal email for your secure 1Password invite to set your master passphrase. Your corporate laptop has been configured via Jamf Zero-Touch with full-disk encryption.",
           actionPlan: [
-            "Revoke OAuth token grant across Google Workspace organization for QuickNotes AI.",
-            "Add OAuth Client ID 7782194-quicknotes-ai to domain-wide blocklist.",
-            "Deploy Chrome enterprise policy to uninstall extension ID eojkldfba1239.",
-            "Onboard user to corporate-approved enterprise LLM assistant (Ajaia Enterprise Gemini)."
+            "Execute automated Okta SCIM account generation for 8 identities.",
+            "Assign role-based GitHub groups and 1Password enterprise vaults.",
+            "Verify Jamf MDM enrollment profile push to shipped corporate laptops.",
+            "Dispatch automated Day-1 security onboarding briefing."
           ],
           commands: [
             {
-              id: "cmd-8043-1",
-              label: "List Active OAuth Tokens for User",
-              cmd: "gam oauth list user r.chen@ajaia.internal format json",
+              id: "cmd-1042-1",
+              label: "Batch Provision Okta Accounts & Assign Bundles",
+              cmd: "python3 -m ajaia_it.provisioning --cohort q4-w2 --csv /opt/onboarding/cohort_q4_w2.csv --enforce-mfa-yubikey",
+              risk: "NEEDS APPROVAL",
+              selected: true,
+              description: "Generates Okta identities and assigns baseline apps."
+            },
+            {
+              id: "cmd-1042-2",
+              label: "Verify MDM Security Compliance Baseline",
+              cmd: "jamf-cli policy check --cohort q4-w2 --require-filevault --require-edr-crowdstrike",
               risk: "SAFE",
               selected: true,
-              description: "Inspects all current third-party authorizations on user profile."
-            },
-            {
-              id: "cmd-8043-2",
-              label: "Revoke QuickNotes AI OAuth Token",
-              cmd: "gam oauth revoke user r.chen@ajaia.internal clientid 7782194-quicknotes-ai.apps.googleusercontent.com",
-              risk: "NEEDS APPROVAL",
-              selected: true,
-              description: "Terminates the third-party refresh token immediately."
-            },
-            {
-              id: "cmd-8043-3",
-              label: "Block App Domain-Wide in Workspace Admin",
-              cmd: "gam update security third_party_apps block appid 7782194-quicknotes-ai",
-              risk: "NEEDS APPROVAL",
-              selected: true,
-              description: "Prevents any employee from authorizing this application in the future."
+              description: "Validates endpoint security controls prior to account activation."
             }
           ],
-          rollbackPlan: "Restore OAuth permissions if vendor completes enterprise third-party risk assessment and legal executes standard Data Processing Agreement (DPA)."
+          rollbackPlan: "Deactivate batch accounts via okta-cli if HR postpones start date."
         },
         evidence: [
           {
-            id: "ev-8043-1",
-            title: "OAuth Token Grant Log",
-            source: "Google Workspace Security Center",
-            timestamp: "2026-10-11T12:12:30Z",
-            hash: "sha256:55ef8821bc19...",
-            content: `{
-  "event": "token_grant",
-  "client_id": "7782194-quicknotes-ai.apps.googleusercontent.com",
-  "client_name": "QuickNotes AI Meeting Summarizer",
-  "user": "r.chen@ajaia.internal",
-  "scopes": [
-    "https://www.googleapis.com/auth/gmail.readonly",
-    "https://www.googleapis.com/auth/calendar.events",
-    "https://www.googleapis.com/auth/drive.readonly"
-  ],
-  "status": "active"
-}`
-          },
-          {
-            id: "ev-8043-2",
-            title: "Vendor Intelligence & Privacy Risk Card",
-            source: "CASB Threat Intelligence Engine",
-            timestamp: "2026-10-11T12:14:00Z",
-            hash: "sha256:bb1293efaa45...",
-            content: `VENDOR ASSESSMENT: QuickNotes AI (quicknotes-ai.io)
-Domain Registration Date: 2026-09-23 (18 days old)
-Registrar: NameCheap Privacy Protect (Panama)
-SOC2 Type II: NONE / NOT ATTESTED
-ISO 27001: NONE
-Privacy Policy Term 4.2: "User telemetry and transcription context may be ingested for model optimization and proprietary weights enhancement."
-VERDICT: HIGH RISK / POLICY VIOLATION`
+            id: "ev-1042-1",
+            title: "HRIS Batch Onboarding Payload",
+            source: "BambooHR API Webhook",
+            timestamp: "2026-10-11T13:15:00Z",
+            hash: "sha256:1a84c832bb5e90...",
+            content: `ONBOARDING COHORT: Q4-Week 2
+Count: 8 Candidates
+Roles:
+ - 5x Senior Backend Engineer (London, UK)
+ - 3x Clinical NLP Specialist (Berlin & Singapore)
+Start Date: Monday, 2026-10-12
+Pre-Approved Hardware: Apple MacBook Pro 16" (M3 Max, Jamf Pre-Enrolled)
+Background Check: Completed & Verified (Checkr)`
           }
         ],
         checklist: [
-          { id: "chk-3-1", label: "Confirmed third-party app is not on approved IT catalog", checked: true },
-          { id: "chk-3-2", label: "Verified mail.readonly scope grant in Google Admin Console", checked: true },
-          { id: "chk-3-3", label: "Prepared user coaching message regarding approved AI tools", checked: false }
+          { id: "chk-2-1", label: "Confirmed start dates and verified manager approvals", checked: true },
+          { id: "chk-2-2", label: "Verified hardware shipment tracking & delivery confirmation", checked: true },
+          { id: "chk-2-3", label: "Validated available Okta & GitHub Enterprise licenses", checked: true },
+          { id: "chk-2-4", label: "Enforced mandatory hardware-backed MFA (WebAuthn/FIDO2)", checked: false }
         ],
         timeline: [
-          { time: "12:12:30", title: "Extension Installed", desc: "User r.chen consented to QuickNotes AI OAuth scopes", actor: "Google Workspace", type: "warning" },
-          { time: "12:14:00", title: "CASB Policy Alert", desc: "Flagged unvetted high-risk OAuth scopes on executive account", actor: "CASB Engine", type: "warning" },
-          { time: "12:15:00", title: "Incident Generated", desc: "Triage engine calculated 91% confidence, recommended token revocation", actor: "HITL Triage", type: "ai" }
+          { time: "13:15:00", title: "HRIS Webhook Triggered", desc: "Batch onboarding ticket queued", actor: "BambooHR", type: "system" },
+          { time: "13:15:10", title: "AI Copilot Auto-Triaged", desc: "Validated licenses and drafted provisioning script", actor: "Ajaia IT Bot", type: "ai" }
         ]
       },
       {
-        id: "INC-8044",
-        title: "Contractor Retained Production AWS & Okta Access 7 Days Post-Contract",
+        id: "TICK-1043",
+        title: "AI Access Request: Claude 3.5 Sonnet & OpenAI API Provisioning with High Quotas for NLP Team",
+        severity: "P2",
+        category: "AI Systems & LLM Operations",
+        channel: "Slack Bot (#it-helpdesk)",
+        source: "Slack Interaction Payload",
+        affectedEntity: "Clinical NLP Research Team (Lead: Dr. Marcus Vance)",
+        created: "2026-10-11T12:00:00Z",
+        approvalStatus: "Pending Review",
+        slaTarget: "Target: 4h Resolve (2h 45m remaining)",
+        slaUrgent: false,
+        routedQueue: "AI Platform & Cloud Governance Queue",
+        description: "Marcus Vance submitted request via Slack #it-helpdesk: 'Need high-rate-limit enterprise Claude 3.5 Sonnet and OpenAI API keys for clinical trial summarization benchmark. Monthly budget: $4,500.' Requires verification of HIPAA BAA terms and budget approval.",
+        cisoImpact: {
+          financialExposure: "$4,500 monthly recurring API expenditure",
+          secDisclosureTrigger: "No",
+          regulatorySla: "HIPAA Zero-Data-Retention (ZDR) verification required",
+          stakeholderAction: "Confirm Anthropic & OpenAI Zero-Data-Retention policy is active on account"
+        },
+        aiSummary: {
+          model: "Ajaia-IT-Copilot (v4.2)",
+          confidence: 94,
+          confidenceRationale: "Verified requester is Clinical NLP Lead and verified department budget code matches approved Q4 budget.",
+          riskLevel: "NEEDS APPROVAL",
+          factorWeights: {
+            "Budget Code Verification": "98%",
+            "ZDR Compliance Match": "96%",
+            "Cost Threshold Control": "92%",
+            "Rate-Limit Feasibility": "95%"
+          },
+          cotTrace: [
+            "1. Ingested Slack request from Marcus Vance.",
+            "2. Verified user role: Lead Clinical Research Engineer.",
+            "3. Checked organizational compliance: Healthcare data processing requires Zero-Data-Retention (ZDR) and BAA coverage.",
+            "4. Confirmed Enterprise Anthropic & OpenAI agreements include signed HIPAA BAAs.",
+            "5. Prepared scoped API key with $5,000 monthly spending cap and restricted IP CIDR."
+          ],
+          executiveSummary: "Legitimate request for high-rate-limit LLM API keys for clinical summarization. Verified department budget and confirmed HIPAA Zero-Data-Retention guarantees are active on organization workspace.",
+          rootCause: "New clinical NLP model benchmarking workload requiring elevated API rate limits.",
+          impactScope: [
+            "Anthropic Claude 3.5 Enterprise Organization",
+            "OpenAI Enterprise Organization",
+            "Clinical NLP AWS VPC Egress Gateways",
+            "Monthly Cloud Budget Allocation ($4,500)"
+          ],
+          suggestedReply: "Hi Dr. Vance, your request for elevated Claude 3.5 Sonnet and OpenAI API keys has been approved with a $5,000 monthly cap. Both keys have been provisioned under our Enterprise Zero-Data-Retention agreements with signed HIPAA BAAs. Your keys are available in your 1Password 'Clinical AI Secrets' vault.",
+          actionPlan: [
+            "Provision scoped Anthropic & OpenAI API keys with $5,000 monthly spend alerts.",
+            "Enforce IP allowlisting restricted to Ajaia AWS NAT Gateway CIDRs.",
+            "Deposit credentials securely into team 1Password vault.",
+            "Reply to Marcus Vance on Slack with usage guidelines."
+          ],
+          commands: [
+            {
+              id: "cmd-1043-1",
+              label: "Generate Scoped Enterprise API Keys with Spend Caps",
+              cmd: "python3 -m ajaia_ai.keys create --team clinical-nlp --providers anthropic,openai --monthly-cap 5000 --require-zdr --vault clinical-ai-secrets",
+              risk: "NEEDS APPROVAL",
+              selected: true,
+              description: "Provisions compliant keys and stores in 1Password."
+            }
+          ],
+          rollbackPlan: "Revoke API keys via ajaia_ai.keys revoke if unexpected traffic spike occurs."
+        },
+        evidence: [
+          {
+            id: "ev-1043-1",
+            title: "Slack Interaction Thread",
+            source: "Slack #it-helpdesk Bot",
+            timestamp: "2026-10-11T12:00:00Z",
+            hash: "sha256:55ef8821bc19...",
+            content: `@Ajaia-IT-Bot: "Marcus Vance requested: Elevated API rate limits for Claude 3.5 Sonnet & GPT-4o for Clinical Summarization Project."
+Budget Code: CLIN-AI-409 (Approved by VP Product)
+Target Project: Clinical Trials Phase II NLP Extraction
+HIPAA PHI Status: Will process de-identified clinical notes (ZDR Required)`
+          }
+        ],
+        checklist: [
+          { id: "chk-3-1", label: "Confirmed department manager budget sign-off", checked: true },
+          { id: "chk-3-2", label: "Verified signed HIPAA BAA & Zero-Data-Retention (ZDR) policy", checked: true },
+          { id: "chk-3-3", label: "Enforced monthly hard spending cap in API console ($5,000)", checked: false }
+        ],
+        timeline: [
+          { time: "12:00:00", title: "Slack Ticket Created", desc: "Submitted via Slack #it-helpdesk", actor: "Marcus Vance", type: "system" },
+          { time: "12:00:08", title: "AI Pre-Triage", desc: "Verified budget code and BAA status", actor: "Ajaia IT Bot", type: "ai" }
+        ]
+      },
+      {
+        id: "TICK-1044",
+        title: "Data Governance: Student Learning Analytics Integration (FERPA Compliance Review)",
         severity: "P3",
-        category: "Onboarding Gaps",
-        source: "Identity Governance (BambooHR vs. Okta/AWS IAM Reconciliation)",
-        affectedEntity: "Identity: alex.turner@contractor.ajaia.internal (Apex Technical)",
+        category: "Education FERPA & Data Privacy",
+        channel: "Employee Self-Service Portal",
+        source: "Jira / IT Governance Intake Portal",
+        affectedEntity: "Product Team (EdTech Learning Copilot) & Partner University LMS",
         created: "2026-10-11T09:00:00Z",
         approvalStatus: "Pending Review",
-        description: "Automated weekly identity reconciliation found a discrepancy: Contractor Alex Turner's engagement ended on 2026-10-04 per HRIS records, but Okta identity remains in 'Active' status with SSO entitlements for AWS Production Console (ReadOnly) and Jira. 14 authentications occurred after contract end date.",
+        slaTarget: "Target: 24h Resolve (18h remaining)",
+        slaUrgent: false,
+        routedQueue: "IT Compliance & EdTech Vendor Risk Queue",
+        description: "EdTech product squad requested OAuth integration approval to connect Ajaia's Learning Copilot with partner university Canvas LMS API to ingest student performance data for model fine-tuning. Requires FERPA directory information verification and least-privilege scoping.",
         cisoImpact: {
-          financialExposure: "SOC2 Type II audit exception / Contractor IP exposure",
+          financialExposure: "University institutional contract compliance violation",
           secDisclosureTrigger: "No",
-          regulatorySla: "24 Hours (Access Control Compliance)",
-          stakeholderAction: "Audit contractor agency vendor contract & patch SCIM retry logic"
+          regulatorySla: "FERPA Student Privacy Regulation (34 CFR Part 99)",
+          stakeholderAction: "Ensure student PII is hashed before ingestion into vector database"
         },
         aiSummary: {
-          model: "Ajaia-SecOps-Triage (v4.2)",
-          confidence: 95,
-          confidenceRationale: "Mismatched state between authoritative HRIS record (terminated) and directory state (active) confirmed via SCIM API logs.",
+          model: "Ajaia-IT-Copilot (v4.2)",
+          confidence: 92,
+          confidenceRationale: "High confidence based on structured FERPA compliance checklist and LMS API permission mapping.",
           riskLevel: "NEEDS APPROVAL",
           factorWeights: {
-            "HRIS Timestamp Precision": "99%",
-            "Okta Identity State Match": "97%",
-            "CloudTrail Telemetry Correlation": "95%",
-            "Account Suspension Safety": "98%"
+            "FERPA Scope Precision": "97%",
+            "OAuth Grant Safety": "94%",
+            "Anonymization Efficacy": "91%",
+            "Vendor Governance Match": "93%"
           },
           cotTrace: [
-            "1. BambooHR API endpoint reported contractor engagement end date: 2026-10-04.",
-            "2. Okta System Log showed 14 successful SAML/SSO assertions post-termination date.",
-            "3. AWS CloudTrail recorded 14 AssumeRole calls for EngineeringReadOnly role.",
-            "4. Checked CloudTrail for S3 GetObject calls: No mass data exfiltration observed.",
-            "5. Recommended actions: Suspend Okta user, invalidate AWS STS tokens, submit Jira ticket to HRIS engineering."
+            "1. Analyzed proposed OAuth scopes requested for Canvas LMS API.",
+            "2. Identified requested scope: 'url:GET|/api/v1/courses/:course_id/users'.",
+            "3. Detected raw student names and school emails in API response schema.",
+            "4. Flagged FERPA compliance conflict: Model fine-tuning cannot ingest unhashed student directory records.",
+            "5. Formulated remediation: Enforce SHA-256 student ID anonymization proxy before vector ingestion."
           ],
-          executiveSummary: "Offboarding automation failure left contractor with active production AWS console and internal documentation access for 7 days post-contract. No write operations or data egress observed, but unauthorized access violates least-privilege principles and SOC2 CC6.3.",
-          rootCause: "HR ticket in Jira Service Management was closed before Okta SCIM deprovisioning webhook completed due to a gateway timeout.",
+          executiveSummary: "Canvas LMS integration review for university partner. Requested scopes contain raw student PII which conflicts with FERPA guidelines. Recommended approval contingent on deploying our automated student pseudonymization proxy.",
+          rootCause: "EdTech product team expanding copilot capabilities without pre-configured data anonymization middleware.",
           impactScope: [
-            "Okta Identity (alex.turner@contractor.ajaia.internal)",
-            "AWS Production Console (ReadOnlyAccess Role)",
-            "Internal Documentation (Confluence & Jira)",
-            "Compliance: SOC2 CC6.3 (Timely Deprovisioning)"
+            "Partner University Canvas LMS API",
+            "Ajaia EdTech Vector Database (Pinecone)",
+            "Compliance: FERPA (34 CFR Part 99)"
           ],
+          suggestedReply: "Hi Product Team, we have reviewed the Canvas LMS integration. To comply with FERPA regulations for our university partner, the integration must route through our student pseudonymization proxy (proxy.edtech.ajaia.internal) which hashes student names and IDs prior to ingestion. We have pre-configured the scoped API credentials accordingly.",
           actionPlan: [
-            "Immediately suspend Okta account for alex.turner@contractor.ajaia.internal.",
-            "Revoke all active AWS IAM temporary sessions and STS tokens.",
-            "Run CloudTrail audit on all ReadOnly API queries executed between Oct 5 and Oct 11.",
-            "Log offboarding process non-conformance ticket to fix JSM webhook retry logic."
+            "Approve scoped Canvas LMS integration with read-only course-level permissions.",
+            "Require all API traffic to route through student pseudonymization proxy.",
+            "Log compliance attestation in Vendor & Third-Party Risk Register."
           ],
           commands: [
             {
-              id: "cmd-8044-1",
-              label: "Audit Active IAM Sessions in AWS",
-              cmd: "aws sts get-caller-identity && aws iam list-user-policies --user-name alex.turner-contractor",
+              id: "cmd-1044-1",
+              label: "Deploy Student Anonymization Middleware Proxy",
+              cmd: "helm upgrade --install lms-anonymizer-proxy ./charts/lms-proxy --set ferpaMode=enforced --set saltSecret=vault:edtech-salts",
               risk: "SAFE",
               selected: true,
-              description: "Verifies current attached policies and temporary token states."
-            },
-            {
-              id: "cmd-8044-2",
-              label: "Suspend Okta Directory Account",
-              cmd: 'okta-cli user suspend --id 00u8x92k4Lp9 --reason "HITL Offboarding Remediation"',
-              risk: "NEEDS APPROVAL",
-              selected: true,
-              description: "Instantly revokes SSO access across all connected SaaS and cloud applications."
-            },
-            {
-              id: "cmd-8044-3",
-              label: "Revoke Active AWS STS Sessions",
-              cmd: 'aws iam revoke-sessions --user-name alex.turner-contractor --before "2026-10-11T15:00:00Z"',
-              risk: "NEEDS APPROVAL",
-              selected: true,
-              description: "Terminates all currently active console and CLI sessions."
+              description: "Deploys real-time student PII hashing proxy."
             }
           ],
-          rollbackPlan: "Un-suspend Okta user if contractor engagement was extended and approved by hiring manager via formal HR contract addendum."
+          rollbackPlan: "Disable LMS OAuth token if unhashed student data is detected in staging logs."
         },
         evidence: [
           {
-            id: "ev-8044-1",
-            title: "HRIS Termination API Payload",
-            source: "BambooHR Webhook / API Log",
-            timestamp: "2026-10-04T17:00:00Z",
-            hash: "sha256:3901bc7721ab...",
-            content: `{
-  "employee_id": "CONT-419",
-  "name": "Alex Turner",
-  "vendor": "Apex Technical Solutions",
-  "status": "Terminated",
-  "contract_end_date": "2026-10-04T17:00:00Z",
-  "reason": "Contract Completion",
-  "offboarding_ticket": "SEC-8921"
-}`
-          },
-          {
-            id: "ev-8044-2",
-            title: "Post-Termination Okta SSO Log",
-            source: "Okta System Log API",
-            timestamp: "2026-10-09T08:15:22Z",
+            id: "ev-1044-1",
+            title: "LMS OAuth Scope Request Payload",
+            source: "Canvas LMS Developer Portal",
+            timestamp: "2026-10-11T09:00:00Z",
             hash: "sha256:7721ab9901fe...",
-            content: `EVENT: user.authentication.sso
-USER: alex.turner@contractor.ajaia.internal
-APP: AWS IAM Identity Center (Console Login)
-IP: 98.214.55.12 (Residential Comcast, Naperville IL)
-RESULT: SUCCESS
-TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
+            content: `REQUESTED OAUTH CLIENT: Ajaia Learning Copilot
+Partner Institution: Metro State University
+Requested Scopes:
+ - /api/v1/courses/:id/analytics/student_summary
+ - /api/v1/users/:user_id/profile (CONTAINS FULL NAMES & STUDENT EMAILS)
+FERPA Compliance Status: REQUIRES ANONYMIZATION GATEWAY`
           }
         ],
         checklist: [
-          { id: "chk-4-1", label: "Confirmed contract end date with Apex Technical manager", checked: true },
-          { id: "chk-4-2", label: "Reviewed AWS CloudTrail for unauthorized S3 GetObject or secrets access", checked: true },
-          { id: "chk-4-3", label: "Verified no corporate laptop hardware unreturned", checked: false }
+          { id: "chk-4-1", label: "Confirmed university data sharing agreement on file", checked: true },
+          { id: "chk-4-2", label: "Verified student pseudonymization proxy is active and verified", checked: false },
+          { id: "chk-4-3", label: "Confirmed no student records will be used for foundation model pre-training", checked: true }
         ],
         timeline: [
-          { time: "2026-10-04 17:00", title: "Contract Ended", desc: "BambooHR recorded contract expiration date", actor: "BambooHR", type: "system" },
-          { time: "2026-10-04 17:01", title: "Deprovisioning Failed", desc: "Jira Service Management webhook to Okta timed out after 30s", actor: "Jira / SCIM", type: "warning" },
-          { time: "2026-10-09 08:15", title: "Unauthorized Login", desc: "Contractor logged into AWS Console via Okta SSO", actor: "Okta Log", type: "warning" },
-          { time: "2026-10-11 09:00", title: "Reconciliation Scan", desc: "Weekly identity reconciliation flagged state mismatch", actor: "HITL Triage", type: "ai" }
+          { time: "09:00:00", title: "Ticket Submitted", desc: "Submitted via Employee Portal", actor: "EdTech Product Lead", type: "system" },
+          { time: "09:00:15", title: "AI FERPA Audit", desc: "Flagged raw student PII; generated proxy recommendation", actor: "Ajaia IT Bot", type: "ai" }
+        ]
+      },
+      {
+        id: "TICK-1045",
+        title: "Security Alert: Production Cloudflare & Gateway API Token Committed to Public Branch",
+        severity: "P1",
+        category: "Security & Cloud Operations",
+        channel: "Telemetry / Security Webhook",
+        source: "GitHub Secret Scanning & GitGuardian Webhook",
+        affectedEntity: "repo: ajaia-org/gateway-service (Developer: David Miller)",
+        created: "2026-10-11T08:30:00Z",
+        approvalStatus: "Pending Review",
+        slaTarget: "Target: 1h Resolve (22m remaining)",
+        slaUrgent: true,
+        routedQueue: "SecOps L2 Incident Commander (Auto-escalated by high entropy token match)",
+        description: "GitHub Secret Scanning detected a live Cloudflare Enterprise API token committed to public branch feature/traffic-router in repository gateway-service. Threat telemetry observed external reconnaissance queries from unrecognized IP ranges.",
+        cisoImpact: {
+          financialExposure: "DNS takeover and DDoS protection bypass risk",
+          secDisclosureTrigger: "No (Isolated within 15 minutes)",
+          regulatorySla: "Immediate containment required",
+          stakeholderAction: "Rotate all Cloudflare zone tokens and audit DNS audit trails"
+        },
+        aiSummary: {
+          model: "Ajaia-IT-Copilot (v4.2)",
+          confidence: 97,
+          confidenceRationale: "High confidence due to direct signature match against Cloudflare API token pattern.",
+          riskLevel: "HIGH RISK",
+          factorWeights: {
+            "Secret Signature Match": "99%",
+            "Git Tree Provenance": "98%",
+            "Egress Threat Correlation": "96%",
+            "Key Rotation Determinism": "99%"
+          },
+          cotTrace: [
+            "1. Detected exposed token in public GitHub commit.",
+            "2. Correlated pusher identity d.miller@ajaia.internal.",
+            "3. Checked Cloudflare audit logs: 3 unauthorized read queries recorded.",
+            "4. Formulated immediate revocation and replacement in AWS Secrets Manager."
+          ],
+          executiveSummary: "Production Cloudflare API token exposed in public repository. Automated token revocation and secret manager rotation required immediately.",
+          rootCause: "Hardcoded API token during local debugging of traffic routing rules.",
+          impactScope: [
+            "Cloudflare Enterprise Account",
+            "Gateway Service Routing (Production)",
+            "SOC2 CC6.1 Logical Security Controls"
+          ],
+          suggestedReply: "Hi David, IT Security detected an active Cloudflare token committed to your public branch. We have revoked the compromised token and provisioned a rotated secret in AWS Secrets Manager. Please pull the latest configuration and complete our 10-minute secrets management refresher.",
+          actionPlan: [
+            "Revoke compromised Cloudflare token immediately.",
+            "Deploy replacement token to AWS Secrets Manager.",
+            "Purge commit history from remote repository."
+          ],
+          commands: [
+            {
+              id: "cmd-1045-1",
+              label: "Revoke and Rotate Cloudflare Token",
+              cmd: "python3 -m ajaia_sec.creds rotate --provider cloudflare --token-id cf_live_8910 --env production",
+              risk: "NEEDS APPROVAL",
+              selected: true,
+              description: "Revokes token in Cloudflare and rotates secret."
+            }
+          ],
+          rollbackPlan: "Restore previous zone configurations if traffic routing fails."
+        },
+        evidence: [
+          {
+            id: "ev-1045-1",
+            title: "Git Commit Patch",
+            source: "GitHub Secret Scanning",
+            timestamp: "2026-10-11T08:30:15Z",
+            hash: "sha256:bb1293efaa45...",
+            content: `diff --git a/config/cf.go b/config/cf.go
++const CF_TOKEN = "v1.0-49fa01bc-cf9912048471b0e32049e7a83301fbdf";
++export const cfClient = NewCloudflareClient(CF_TOKEN);`
+          }
+        ],
+        checklist: [
+          { id: "chk-5-1", label: "Confirmed token validity in Cloudflare dashboard", checked: true },
+          { id: "chk-5-2", label: "Rotated token in AWS Secrets Manager", checked: true },
+          { id: "chk-5-3", label: "Verified zero DNS record alterations during exposure window", checked: false }
+        ],
+        timeline: [
+          { time: "08:30:00", title: "Commit Pushed", desc: "Committed to public branch", actor: "David Miller", type: "system" },
+          { time: "08:30:05", title: "Secret Flagged", desc: "GitHub Secret Scanning triggered", actor: "GitHub", type: "warning" },
+          { time: "08:30:10", title: "AI Triage Ingested", desc: "Generated revocation script", actor: "Ajaia IT Bot", type: "ai" }
         ]
       }
     ];
@@ -2295,39 +2239,38 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     const DEFAULT_AUDIT_LOG = [
       {
         timestamp: "2026-10-11T14:32:05Z",
-        incidentId: "INC-8041",
-        actor: "Ajaia-Triage-Bot (AI)",
+        incidentId: "TICK-1041",
+        actor: "Ajaia-IT-Bot (AI)",
         action: "AI_TRIAGE_INGESTION",
-        details: "Assessed exposed OpenAI API key. Generated 96% confidence score and 3 remediation steps.",
+        details: "Assessed HIPAA PHI leak on Drive file. Calibrated 96% confidence score and drafted containment.",
         notes: "Automated analysis completed in 1.4s."
       },
       {
-        timestamp: "2026-10-11T13:45:00Z",
-        incidentId: "INC-8042",
-        actor: "Ajaia-Triage-Bot (AI)",
+        timestamp: "2026-10-11T13:15:10Z",
+        incidentId: "TICK-1042",
+        actor: "Ajaia-IT-Bot (AI)",
         action: "AI_TRIAGE_INGESTION",
-        details: "Assessed Drive public sharing. Correlated with 3 anonymous downloads and DLP policy.",
+        details: "Triaged batch onboarding event for 8 remote engineers. Validated Okta license pool.",
         notes: "Automated analysis completed in 1.1s."
       },
       {
-        timestamp: "2026-10-11T12:15:00Z",
-        incidentId: "INC-8043",
-        actor: "Ajaia-Triage-Bot (AI)",
+        timestamp: "2026-10-11T12:00:08Z",
+        incidentId: "TICK-1043",
+        actor: "Ajaia-IT-Bot (AI)",
         action: "AI_TRIAGE_INGESTION",
-        details: "Assessed QuickNotes AI OAuth scopes. Flagged unvetted domain risk.",
+        details: "Assessed LLM API request from Clinical NLP Lead. Verified budget and HIPAA BAA status.",
         notes: "Automated analysis completed in 0.9s."
       },
       {
-        timestamp: "2026-10-11T09:00:00Z",
-        incidentId: "INC-8044",
-        actor: "Ajaia-Triage-Bot (AI)",
+        timestamp: "2026-10-11T09:00:15Z",
+        incidentId: "TICK-1044",
+        actor: "Ajaia-IT-Bot (AI)",
         action: "AI_TRIAGE_INGESTION",
-        details: "Reconciliation mismatch detected between BambooHR and Okta directory.",
-        notes: "Automated analysis completed in 1.2s."
+        details: "Evaluated Canvas LMS OAuth scopes against FERPA student privacy rules.",
+        notes: "Automated analysis completed in 1.3s."
       }
     ];
 
-    /* App State */
     let state = {
       incidents: [],
       auditLog: [],
@@ -2335,15 +2278,16 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         severity: "ALL",
         status: "ALL",
         category: "ALL",
+        channel: "ALL",
         search: ""
       },
-      activeView: "queue", // 'queue' or 'detail'
+      activeView: "queue",
       currentIncidentId: null,
-      activeDetailTab: "ai", // 'ai', 'evidence', 'hitl', 'timeline'
+      activeDetailTab: "ai",
       activeEvidenceIndex: 0,
-      personaRole: "L2", // 'L2', 'CISO', 'Auditor'
+      personaRole: "L2",
       selectedIndexInQueue: 0,
-      layoutMode: "tabbed" // 'tabbed' or 'split'
+      layoutMode: "tabbed"
     };
 
     function loadState() {
@@ -2368,13 +2312,13 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     }
 
     function resetDemoData() {
-      if (confirm("Reset all incidents and audit logs to original synthetic assessment state?")) {
+      if (confirm("Reset all IT tickets and audit logs to original Ajaia assessment baseline?")) {
         localStorage.removeItem(STORAGE_KEY_INCIDENTS);
         localStorage.removeItem(STORAGE_KEY_AUDIT);
         state.incidents = JSON.parse(JSON.stringify(DEFAULT_INCIDENTS));
         state.auditLog = JSON.parse(JSON.stringify(DEFAULT_AUDIT_LOG));
         saveState();
-        showToast("✓ Demo state reset to pristine evaluation baseline");
+        showToast("✓ Demo state reset to Ajaia IT Manager assessment baseline");
         goBackToQueue();
       }
     }
@@ -2385,7 +2329,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       document.getElementById("btnRoleCiso").classList.toggle("active", role === "CISO");
       document.getElementById("btnRoleAuditor").classList.toggle("active", role === "Auditor");
       renderApp();
-      showToast(`Switched perspective to: ${role === 'L2' ? 'L2 Specialist' : (role === 'CISO' ? 'CISO Executive Lens' : 'AI Governance & Auditor')}`);
+      showToast(`Switched perspective to: ${role === 'L2' ? 'AI-First IT Manager' : (role === 'CISO' ? 'CISO & Compliance Lens' : 'AI Governance & Auditor')}`);
     }
 
     function toggleLayoutMode() {
@@ -2394,7 +2338,6 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       showToast(`Switched view layout to: ${state.layoutMode === 'split' ? '3-Pane Command Center' : 'Tabbed Mode'}`);
     }
 
-    /* Rendering Router */
     function renderApp() {
       const root = document.getElementById("appRoot");
       if (state.activeView === "queue") {
@@ -2435,6 +2378,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         if (state.currentFilter.severity !== "ALL" && inc.severity !== state.currentFilter.severity) return false;
         if (state.currentFilter.status !== "ALL" && inc.approvalStatus !== state.currentFilter.status) return false;
         if (state.currentFilter.category !== "ALL" && inc.category !== state.currentFilter.category) return false;
+        if (state.currentFilter.channel !== "ALL" && inc.channel !== state.currentFilter.channel) return false;
         if (state.currentFilter.search) {
           const q = state.currentFilter.search.toLowerCase();
           const matchTitle = inc.title.toLowerCase().includes(q);
@@ -2447,46 +2391,46 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       });
 
       return `
-        <!-- Executive KPI Cards -->
+        <!-- Executive SLA & Operational Dashboard -->
         <section class="executive-dashboard" aria-label="Incident Telemetry Cards">
           <div class="exec-card ${state.currentFilter.status === 'ALL' ? 'active' : ''}" onclick="setFilter('status', 'ALL')">
             <div class="exec-card-header">
-              <span class="exec-card-title">Total Active Cases</span>
+              <span class="exec-card-title">Total Active Queue</span>
               <span class="pulse-dot green"></span>
             </div>
             <div class="exec-card-val-row">
               <span class="exec-card-val">${total}</span>
-              <span class="exec-card-delta">100% Triaged</span>
+              <span class="exec-card-delta">100% Ingested</span>
             </div>
           </div>
           <div class="exec-card ${state.currentFilter.status === 'Pending Review' ? 'active' : ''}" onclick="setFilter('status', 'Pending Review')">
             <div class="exec-card-header">
-              <span class="exec-card-title">Pending Human Review</span>
+              <span class="exec-card-title">Pending Human Gate</span>
               <span class="pulse-dot amber"></span>
             </div>
             <div class="exec-card-val-row">
               <span class="exec-card-val" style="color: #fbbf24;">${pending}</span>
-              <span class="exec-card-delta" style="color: #f59e0b;">Gated</span>
+              <span class="exec-card-delta" style="color: #f59e0b;">HITL Gated</span>
             </div>
           </div>
           <div class="exec-card ${state.currentFilter.status === 'Approved' ? 'active' : ''}" onclick="setFilter('status', 'Approved')">
             <div class="exec-card-header">
-              <span class="exec-card-title">Approved &amp; Executed</span>
+              <span class="exec-card-title">Resolved &amp; Executed</span>
               <span class="pulse-dot green"></span>
             </div>
             <div class="exec-card-val-row">
               <span class="exec-card-val" style="color: #34d399;">${approved}</span>
-              <span class="exec-card-delta">Zero Failure</span>
+              <span class="exec-card-delta">Zero Downtime</span>
             </div>
           </div>
           <div class="exec-card ${state.currentFilter.severity === 'P1' ? 'active' : ''}" onclick="setFilter('severity', 'P1')">
             <div class="exec-card-header">
-              <span class="exec-card-title">Critical P1 Incidents</span>
+              <span class="exec-card-title">Critical P1 SLAs</span>
               <span class="pulse-dot red"></span>
             </div>
             <div class="exec-card-val-row">
               <span class="exec-card-val" style="color: #f43f5e;">${p1Count}</span>
-              <span class="exec-card-delta" style="color: #f43f5e;">Urgent SLA</span>
+              <span class="exec-card-delta" style="color: #f43f5e;">&lt; 1h SLA</span>
             </div>
           </div>
         </section>
@@ -2495,15 +2439,22 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         <section class="toolbar">
           <div class="search-box">
             <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search by case ID, asset, keyword..." value="${escapeHtml(state.currentFilter.search)}">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by case ID, requester, asset, keyword..." value="${escapeHtml(state.currentFilter.search)}">
           </div>
           <div class="filter-group">
+            <select id="channelSelect" class="filter-select">
+              <option value="ALL" ${state.currentFilter.channel === 'ALL' ? 'selected' : ''}>All Intake Channels</option>
+              <option value="Slack Bot (#it-helpdesk)" ${state.currentFilter.channel === 'Slack Bot (#it-helpdesk)' ? 'selected' : ''}>Slack (#it-helpdesk)</option>
+              <option value="Self-Service Employee Portal" ${state.currentFilter.channel === 'Self-Service Employee Portal' ? 'selected' : ''}>Employee Portal</option>
+              <option value="Email (support@ajaia.io)" ${state.currentFilter.channel === 'Email (support@ajaia.io)' ? 'selected' : ''}>Email Support</option>
+              <option value="Telemetry / Security Webhook" ${state.currentFilter.channel === 'Telemetry / Security Webhook' ? 'selected' : ''}>Telemetry Webhook</option>
+            </select>
             <select id="severitySelect" class="filter-select">
               <option value="ALL" ${state.currentFilter.severity === 'ALL' ? 'selected' : ''}>All Priorities</option>
-              <option value="P1" ${state.currentFilter.severity === 'P1' ? 'selected' : ''}>P1 - Critical</option>
-              <option value="P2" ${state.currentFilter.severity === 'P2' ? 'selected' : ''}>P2 - High</option>
-              <option value="P3" ${state.currentFilter.severity === 'P3' ? 'selected' : ''}>P3 - Medium</option>
-              <option value="P4" ${state.currentFilter.severity === 'P4' ? 'selected' : ''}>P4 - Low</option>
+              <option value="P1" ${state.currentFilter.severity === 'P1' ? 'selected' : ''}>P1 - Critical (1h SLA)</option>
+              <option value="P2" ${state.currentFilter.severity === 'P2' ? 'selected' : ''}>P2 - High (4h SLA)</option>
+              <option value="P3" ${state.currentFilter.severity === 'P3' ? 'selected' : ''}>P3 - Medium (24h SLA)</option>
+              <option value="P4" ${state.currentFilter.severity === 'P4' ? 'selected' : ''}>P4 - Low (72h SLA)</option>
             </select>
             <select id="statusSelect" class="filter-select">
               <option value="ALL" ${state.currentFilter.status === 'ALL' ? 'selected' : ''}>All States</option>
@@ -2514,12 +2465,13 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
             </select>
             <select id="categorySelect" class="filter-select">
               <option value="ALL" ${state.currentFilter.category === 'ALL' ? 'selected' : ''}>All Categories</option>
-              <option value="Exposed API Credentials" ${state.currentFilter.category === 'Exposed API Credentials' ? 'selected' : ''}>Exposed API Credentials</option>
-              <option value="Broad Sharing Permissions" ${state.currentFilter.category === 'Broad Sharing Permissions' ? 'selected' : ''}>Broad Sharing Permissions</option>
-              <option value="Unapproved AI Integrations" ${state.currentFilter.category === 'Unapproved AI Integrations' ? 'selected' : ''}>Unapproved AI Integrations</option>
-              <option value="Onboarding Gaps" ${state.currentFilter.category === 'Onboarding Gaps' ? 'selected' : ''}>Onboarding Gaps</option>
+              <option value="Healthcare PHI &amp; HIPAA" ${state.currentFilter.category === 'Healthcare PHI &amp; HIPAA' ? 'selected' : ''}>Healthcare PHI &amp; HIPAA</option>
+              <option value="Onboarding &amp; Identity (25+ Scaling)" ${state.currentFilter.category === 'Onboarding &amp; Identity (25+ Scaling)' ? 'selected' : ''}>Onboarding &amp; Identity (25+ Scaling)</option>
+              <option value="AI Systems &amp; LLM Operations" ${state.currentFilter.category === 'AI Systems &amp; LLM Operations' ? 'selected' : ''}>AI Systems &amp; LLM Operations</option>
+              <option value="Education FERPA &amp; Data Privacy" ${state.currentFilter.category === 'Education FERPA &amp; Data Privacy' ? 'selected' : ''}>Education FERPA &amp; Data Privacy</option>
+              <option value="Security &amp; Cloud Operations" ${state.currentFilter.category === 'Security &amp; Cloud Operations' ? 'selected' : ''}>Security &amp; Cloud Operations</option>
             </select>
-            ${(state.currentFilter.severity !== 'ALL' || state.currentFilter.status !== 'ALL' || state.currentFilter.category !== 'ALL' || state.currentFilter.search) ? `
+            ${(state.currentFilter.severity !== 'ALL' || state.currentFilter.status !== 'ALL' || state.currentFilter.category !== 'ALL' || state.currentFilter.channel !== 'ALL' || state.currentFilter.search) ? `
               <button type="button" class="btn btn-secondary btn-sm" onclick="clearAllFilters()">Reset</button>
             ` : ''}
           </div>
@@ -2530,7 +2482,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           ${filtered.length === 0 ? `
             <div class="empty-state">
               <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
-              <div style="font-size: 15px; font-weight: bold;">No cases match current filter criteria</div>
+              <div style="font-size: 15px; font-weight: bold;">No tickets match current filter criteria</div>
               <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Clear your search or filters to see active triage items.</p>
             </div>
           ` : filtered.map((inc, index) => renderIncidentCard(inc, index)).join('')}
@@ -2548,7 +2500,6 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
 
       const sevBadgeClass = `badge-${inc.severity.toLowerCase()}`;
 
-      // Persona tailored sub-badge
       let personaSnippet = "";
       if (state.personaRole === "CISO" && inc.cisoImpact) {
         personaSnippet = `
@@ -2559,7 +2510,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       } else if (state.personaRole === "Auditor") {
         personaSnippet = `
           <div style="background: rgba(168, 85, 247, 0.08); border-left: 3px solid #a855f7; padding: 4px 10px; font-size: 11.5px; color: #e9d5ff; border-radius: 0 4px 4px 0; margin-top: 4px;">
-            <strong>Governance Check:</strong> CoT Factor Calibration: 96% &bull; NeMo Redaction: Clean &bull; SOC2 Attestation: Attached
+            <strong>Compliance Audit Check:</strong> HIPAA/FERPA Safe Harbor Verified &bull; CoT Grounding: 98% &bull; Least-Privilege Attested
           </div>
         `;
       }
@@ -2569,7 +2520,8 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div class="incident-meta-col">
             <span class="incident-id">${inc.id}</span>
             <span class="badge ${sevBadgeClass}">${inc.severity}</span>
-            <span class="incident-time">${formatDate(inc.created)}</span>
+            <span class="badge badge-channel">${inc.channel || 'Self-Service'}</span>
+            <span class="badge badge-sla ${inc.slaUrgent ? 'urgent' : ''}">${inc.slaTarget || 'SLA: 4h'}</span>
           </div>
           <div class="incident-content-col">
             <div class="incident-title-row">
@@ -2588,18 +2540,18 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
                 ${escapeHtml(inc.affectedEntity)}
               </span>
               <span class="incident-tag-item">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Telemetry: ${escapeHtml(inc.source)}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Route: ${escapeHtml(inc.routedQueue || 'IT Helpdesk')}
               </span>
             </div>
           </div>
           <div class="incident-action-col">
             <div class="confidence-pill" title="Deterministic Model Confidence">
               <span>🤖</span>
-              <span>${inc.aiSummary.confidence}% Match</span>
+              <span>${inc.aiSummary.confidence}% AI Match</span>
             </div>
             <span class="btn btn-secondary btn-sm" style="pointer-events: none;">
-              Triage Case &rarr;
+              Triage Ticket &rarr;
             </span>
           </div>
         </article>
@@ -2622,6 +2574,8 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       if (stat) stat.addEventListener("change", (e) => { state.currentFilter.status = e.target.value; renderApp(); });
       const cat = document.getElementById("categorySelect");
       if (cat) cat.addEventListener("change", (e) => { state.currentFilter.category = e.target.value; renderApp(); });
+      const ch = document.getElementById("channelSelect");
+      if (ch) ch.addEventListener("change", (e) => { state.currentFilter.channel = e.target.value; renderApp(); });
     }
 
     function setFilter(key, val) {
@@ -2630,7 +2584,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     }
 
     function clearAllFilters() {
-      state.currentFilter = { severity: "ALL", status: "ALL", category: "ALL", search: "" };
+      state.currentFilter = { severity: "ALL", status: "ALL", category: "ALL", channel: "ALL", search: "" };
       renderApp();
     }
 
@@ -2677,6 +2631,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
                 ${escapeHtml(inc.title)}
               </h2>
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span class="badge badge-channel">${inc.channel || 'Portal'}</span>
                 <span class="badge badge-category">${inc.category}</span>
                 <button type="button" class="btn btn-ghost-ai btn-sm" onclick="openXaiDrawer('${inc.id}')">
                   <span>🧠 Inspect AI CoT Reasoning</span>
@@ -2686,34 +2641,33 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
 
             <div class="detail-info-grid">
               <div class="info-item">
-                <span class="info-label">Affected Target</span>
+                <span class="info-label">Requester / Asset</span>
                 <span class="info-value">${escapeHtml(inc.affectedEntity)}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Telemetry Ingest</span>
-                <span class="info-value">${escapeHtml(inc.source)}</span>
+                <span class="info-label">Intake Channel</span>
+                <span class="info-value">${escapeHtml(inc.channel || 'Web Portal')}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Detection Timestamp</span>
-                <span class="info-value">${formatDate(inc.created)}</span>
+                <span class="info-label">Routing Queue</span>
+                <span class="info-value" style="color: #38bdf8;">${escapeHtml(inc.routedQueue || 'IT Helpdesk')}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Model Reasoning Engine</span>
-                <span class="info-value" style="color: #c084fc;">${inc.aiSummary.model}</span>
+                <span class="info-label">SLA Countdown</span>
+                <span class="info-value" style="color: ${inc.slaUrgent ? '#f43f5e' : '#fbbf24'};">${escapeHtml(inc.slaTarget || 'Target: 4h')}</span>
               </div>
             </div>
 
-            <!-- Tab Bar if in tabbed mode -->
             ${state.layoutMode === 'tabbed' ? `
               <div class="tab-nav-container">
                 <nav class="tab-nav">
                   <button type="button" class="tab-btn ${state.activeDetailTab === 'ai' ? 'active' : ''}" onclick="switchDetailTab('ai')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                    1. AI Triage Synthesis &amp; Actions
+                    1. AI Triage &amp; Suggested Solution
                   </button>
                   <button type="button" class="tab-btn ${state.activeDetailTab === 'evidence' ? 'active' : ''}" onclick="switchDetailTab('evidence')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                    2. Source Ground Truth Evidence
+                    2. Telemetry &amp; Intake Logs
                     <span class="tab-count">${inc.evidence ? inc.evidence.length : 0}</span>
                   </button>
                   <button type="button" class="tab-btn ${state.activeDetailTab === 'hitl' ? 'active' : ''}" onclick="switchDetailTab('hitl')">
@@ -2730,7 +2684,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
             ` : ''}
           </div>
 
-          <!-- Main View Body (Tabbed vs 3-Pane Split) -->
+          <!-- Main View Body -->
           ${state.layoutMode === 'split' ? `
             <div class="split-command-center">
               <div>${renderAiPane(inc)}</div>
@@ -2755,7 +2709,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     }
 
     /* =====================================================================
-       PANE 1: AI TRIAGE SYNTHESIS
+       PANE 1: AI TRIAGE & SUGGESTED SOLUTION (Workload Reduction)
        ===================================================================== */
     function renderAiPane(inc) {
       const ai = inc.aiSummary;
@@ -2765,11 +2719,11 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         cisoCallout = `
           <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: var(--radius-sm); padding: 14px 16px;">
             <div style="font-weight: 700; color: #fb7185; font-size: 12px; margin-bottom: 6px;">
-              CISO EXECUTIVE RISK PROFILE
+              CISO &amp; REGULATORY COMPLIANCE ASSESSMENT
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; color: #fecdd3;">
-              <div><strong>Financial Blast:</strong> ${escapeHtml(inc.cisoImpact.financialExposure)}</div>
-              <div><strong>Regulatory SLA:</strong> ${escapeHtml(inc.cisoImpact.regulatorySla)}</div>
+              <div><strong>Liability Exposure:</strong> ${escapeHtml(inc.cisoImpact.financialExposure)}</div>
+              <div><strong>Regulatory Clock:</strong> ${escapeHtml(inc.cisoImpact.regulatorySla)}</div>
               <div style="grid-column: 1 / -1;"><strong>Executive Action:</strong> ${escapeHtml(inc.cisoImpact.stakeholderAction)}</div>
             </div>
           </div>
@@ -2782,8 +2736,8 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
             <div class="ai-banner-left">
               <span style="font-size: 26px;">🤖</span>
               <div>
-                <div style="font-weight: 700; color: #fff; font-size: 14px;">Deterministic AI Triage Synthesis</div>
-                <div class="ai-model-tag">Model: ${ai.model} &bull; Grounded in Enterprise Telemetry</div>
+                <div style="font-weight: 700; color: #fff; font-size: 14px;">AI Triage &amp; Workload Reduction Copilot</div>
+                <div class="ai-model-tag">Model: ${ai.model} &bull; Auto-Routed &bull; Zero-Data-Retention Enforced</div>
               </div>
             </div>
             <div class="ai-confidence-box">
@@ -2794,9 +2748,23 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
 
           ${cisoCallout}
 
+          <!-- Suggested Employee Reply -->
+          ${ai.suggestedReply ? `
+            <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 14px 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  AI Copilot: Suggested Employee Response (Ready to Dispatch)
+                </span>
+                <span style="font-size: 10px; color: var(--text-muted);">Saves ~12 mins drafting time</span>
+              </div>
+              <p style="font-size: 12.5px; color: #e0f2fe; line-height: 1.6; font-style: italic;">"${escapeHtml(ai.suggestedReply)}"</p>
+            </div>
+          ` : ''}
+
           <!-- Factor Calibration Weights -->
           <div style="background: rgba(168, 85, 247, 0.06); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: var(--radius-sm); padding: 12px 14px;">
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d8b4fe; margin-bottom: 6px;">Confidence Factor Decomposition:</div>
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d8b4fe; margin-bottom: 6px;">Confidence Calibration Factors:</div>
             <div style="display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; color: #e9d5ff;">
               ${Object.entries(ai.factorWeights || {}).map(([k, v]) => `
                 <span>${k}: <strong style="color: #38bdf8;">${v}</strong></span>
@@ -2808,19 +2776,11 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div>
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-              Executive Situation Briefing
+              AI Assessment &amp; Root Cause
             </div>
             <p style="font-size: 13.5px; color: #f1f5f9; line-height: 1.6;">${escapeHtml(ai.executiveSummary)}</p>
-          </div>
-
-          <!-- Root Cause -->
-          <div>
-            <div class="panel-section-title">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Probable Root Cause &amp; Vector Analysis
-            </div>
-            <div class="root-cause-box">
-              ${escapeHtml(ai.rootCause)}
+            <div class="root-cause-box" style="margin-top: 10px;">
+              <strong>Root Cause / Operational Context:</strong> ${escapeHtml(ai.rootCause)}
             </div>
           </div>
 
@@ -2828,7 +2788,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div>
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-              Blast Radius &amp; Compliance Boundary Scope
+              Systems, Identities &amp; Compliance Boundary Scope
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               ${ai.impactScope.map(item => `
@@ -2843,7 +2803,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div>
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-              Remediation Action Roadmap
+              Recommended Resolution Plan
             </div>
             <div class="action-step-list">
               ${ai.actionPlan.map((step, idx) => `
@@ -2860,10 +2820,10 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
             <div class="panel-section-title" style="justify-content: space-between;">
               <span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                Proposed CLI Remediation Scripts
+                Automated Execution Scripts (Human-Gated)
               </span>
               <span style="font-size: 11px; text-transform: none; color: var(--text-muted);">
-                Full human override available in Gatekeeper tab
+                Authorized in Gatekeeper Tab
               </span>
             </div>
             <div class="command-list">
@@ -2889,7 +2849,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: var(--radius-sm); padding: 14px 16px;">
             <div style="font-weight: 700; color: #fb7185; font-size: 12px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-              Automated Rollback &amp; Business Continuity Contingency
+              Rollback &amp; Business Continuity Contingency
             </div>
             <p style="font-size: 12px; color: #fda4af; line-height: 1.5;">${escapeHtml(ai.rollbackPlan)}</p>
           </div>
@@ -2897,7 +2857,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           ${state.layoutMode === 'tabbed' ? `
             <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
               <button type="button" class="btn btn-primary" onclick="switchDetailTab('evidence')">
-                Next: Inspect Ground Truth Evidence &rarr;
+                Next: Inspect Telemetry &amp; Intake Logs &rarr;
               </button>
             </div>
           ` : ''}
@@ -2906,7 +2866,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     }
 
     /* =====================================================================
-       PANE 2: SOURCE EVIDENCE TELEMETRY
+       PANE 2: SOURCE EVIDENCE & INTAKE TELEMETRY
        ===================================================================== */
     function renderEvidencePane(inc) {
       const evidences = inc.evidence || [];
@@ -2917,10 +2877,10 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div class="panel-header">
             <div class="panel-title">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-              Immutable Telemetry Artifacts (Ground Truth)
+              Raw Telemetry &amp; Ingestion Logs (Ground Truth)
             </div>
             <span style="font-size: 11.5px; color: var(--text-muted);">
-              SHA-256 Provenance &bull; Ingestion-time Lock
+              Channel: ${escapeHtml(inc.channel || 'Direct')} &bull; SHA-256 Verified
             </span>
           </div>
 
@@ -2945,7 +2905,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
             </div>
             <pre class="evidence-code-block" id="rawEvidenceContent"><code>${escapeHtml(currentEv.content)}</code></pre>
           ` : `
-            <div class="empty-state">No raw artifacts attached to this synthetic case.</div>
+            <div class="empty-state">No raw artifacts attached to this case.</div>
           `}
 
           ${state.layoutMode === 'tabbed' ? `
@@ -2967,7 +2927,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       const code = document.getElementById("rawEvidenceContent");
       if (code) {
         navigator.clipboard.writeText(code.innerText).then(() => {
-          showToast("✓ Raw evidence copied to clipboard");
+          showToast("✓ Telemetry log copied to clipboard");
         });
       }
     }
@@ -2983,9 +2943,9 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div class="hitl-callout">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <div>
-              <div style="font-weight: 700; color: #fff; font-size: 14px;">Mandatory Human-in-the-Loop Attestation</div>
+              <div style="font-weight: 700; color: #fff; font-size: 14px;">Human-in-the-Loop Attestation &amp; Dispatch</div>
               <div style="font-size: 12px; color: #a7f3d0;">
-                All AI suggestions are strictly advisory. Final authorization and parameter modification rests exclusively with the human analyst.
+                AI suggestions are advisory. Final execution of account provisioning, ACL revocation, and responses rests with the IT Manager.
               </div>
             </div>
           </div>
@@ -2993,7 +2953,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div>
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-              Analyst Verification Checklist
+              Mandatory IT Manager Attestation Checklist
             </div>
             <div class="checklist-group">
               ${inc.checklist.map(item => `
@@ -3045,26 +3005,26 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div>
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              Analyst Judgment Rationale &amp; Audit Trail Notes
+              IT Manager Rationale &amp; Audit Trail Notes
             </div>
-            <textarea id="analystNotesInput" class="analyst-notes-textarea" placeholder="Add human review rationale, scope adjustments, or peer escalation notes...">${escapeHtml(inc.analystNotes || '')}</textarea>
+            <textarea id="analystNotesInput" class="analyst-notes-textarea" placeholder="Add resolution notes, employee communication adjustments, or compliance justifications...">${escapeHtml(inc.analystNotes || '')}</textarea>
             <div class="quick-chips-row">
-              <span class="quick-chip" onclick="appendAnalystNote('Remediation approved following verification of source logs and business non-disruption.')">+ Standard Sign-off</span>
-              <span class="quick-chip" onclick="appendAnalystNote('Verified key exposure is external; rotation prioritized immediately.')">+ Priority Rotation</span>
-              <span class="quick-chip" onclick="appendAnalystNote('Requesting second engineer peer review for destructive commands.')">+ Peer Review Escalation</span>
-              <span class="quick-chip" onclick="appendAnalystNote('False positive: Confirmed authorized penetration testing activity.')">+ Authorized Security Test</span>
+              <span class="quick-chip" onclick="appendAnalystNote('Resolution approved; verified against compliance policy baseline.')">+ Standard Approval</span>
+              <span class="quick-chip" onclick="appendAnalystNote('Fast-tracked onboarding cohort; remote hardware encrypted.')">+ Fast-Track Onboarding</span>
+              <span class="quick-chip" onclick="appendAnalystNote('Confirmed HIPAA BAA and Zero-Data-Retention agreements active.')">+ HIPAA BAA Confirmed</span>
+              <span class="quick-chip" onclick="appendAnalystNote('Re-routed ticket to Legal & Compliance for formal DPA review.')">+ Legal Escalation</span>
             </div>
           </div>
 
           <div>
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-              Executive Decision &amp; Audit Commitment
+              Action Dispatch &amp; SLA Commitment
             </div>
             <div class="decision-buttons-row">
               <button type="button" class="btn btn-success" style="padding: 12px 14px;" onclick="handleAnalystDecision('${inc.id}', 'approve')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                Approve &amp; Dispatch
+                Approve &amp; Dispatch Execution
               </button>
               <button type="button" class="btn btn-warning" style="padding: 12px 14px;" onclick="handleAnalystDecision('${inc.id}', 'request_changes')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -3072,7 +3032,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
               </button>
               <button type="button" class="btn btn-danger" style="padding: 12px 14px;" onclick="handleAnalystDecision('${inc.id}', 'reject')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                Reject / Dismiss Case
+                Reject / Dismiss Ticket
               </button>
             </div>
           </div>
@@ -3136,15 +3096,15 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       inc.analystNotes = notes;
 
       const timestamp = new Date().toISOString();
-      const actor = "L2 Security Specialist (Human)";
+      const actor = "Ajaia IT Manager (Human)";
 
       if (decision === "approve") {
         inc.approvalStatus = "Approved";
         inc.timeline.push({
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          title: "Approved by Human Analyst",
-          desc: notes ? `Authorized remediation. Rationale: "${notes}"` : "Authorized execution sequence.",
-          actor: actor,
+          title: "Approved & Executed by IT Manager",
+          desc: notes ? `Authorized resolution: "${notes}"` : "Authorized automated resolution and user response dispatch.",
+          actor,
           type: "success"
         });
         state.auditLog.unshift({
@@ -3152,20 +3112,20 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           incidentId: inc.id,
           actor,
           action: "APPROVAL_GRANTED",
-          details: `Authorized execution of ${inc.aiSummary.commands.filter(c => c.selected).length} remediation command(s).`,
+          details: `Authorized execution of ${inc.aiSummary.commands.filter(c => c.selected).length} remediation command(s) and response dispatch.`,
           notes: notes || "No additional comments."
         });
         saveState();
-        showToast("✓ Remediation authorized! Initializing execution sandbox...");
+        showToast("✓ Action authorized! Initializing execution sandbox...");
         startExecutionSimulation(inc);
 
       } else if (decision === "request_changes") {
         inc.approvalStatus = "Changes Requested";
         inc.timeline.push({
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          title: "Changes Requested",
-          desc: notes ? `Analyst requested scope modifications: "${notes}"` : "Scope adjustments requested.",
-          actor: actor,
+          title: "Changes Requested / Re-routed",
+          desc: notes ? `IT Manager requested modifications: "${notes}"` : "Scope adjustments requested.",
+          actor,
           type: "warning"
         });
         state.auditLog.unshift({
@@ -3173,7 +3133,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           incidentId: inc.id,
           actor,
           action: "CHANGES_REQUESTED",
-          details: "Analyst paused execution and requested adjustments to remediation parameters.",
+          details: "Paused execution and requested adjustments to remediation parameters.",
           notes: notes || "Scope adjustment required."
         });
         saveState();
@@ -3184,21 +3144,21 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         inc.approvalStatus = "Rejected";
         inc.timeline.push({
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          title: "Case Dismissed / Rejected",
-          desc: notes ? `Analyst rejected recommendation: "${notes}"` : "Case dismissed.",
-          actor: actor,
+          title: "Ticket Dismissed / Rejected",
+          desc: notes ? `Analyst dismissed ticket: "${notes}"` : "Ticket dismissed.",
+          actor,
           type: "danger"
         });
         state.auditLog.unshift({
           timestamp,
           incidentId: inc.id,
           actor,
-          action: "CASE_REJECTED",
-          details: "Analyst dismissed AI recommendation as false positive or unauthorized.",
-          notes: notes || "Dismissed by analyst."
+          action: "TICKET_REJECTED",
+          details: "IT Manager dismissed request as out-of-scope or unauthorized.",
+          notes: notes || "Dismissed by IT Manager."
         });
         saveState();
-        showToast("✕ Case marked as Rejected");
+        showToast("✕ Ticket marked as Rejected");
         renderApp();
       }
     }
@@ -3210,11 +3170,11 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
 
       body.innerHTML = `
         <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
-          Executing approved zero-trust remediation sequence for <strong>${inc.id}</strong> in sandbox mode...
+          Executing approved zero-trust IT action sequence for <strong>${inc.id}</strong> in sandbox mode...
         </div>
         <div id="simulatedConsole" style="background: #020409; border: 1px solid var(--border-medium); border-radius: var(--radius-sm); padding: 14px; font-family: var(--font-mono); font-size: 12px; color: #7dd3fc; line-height: 1.6; max-height: 320px; overflow-y: auto;">
           <div style="color: #94a3b8;">[0.00s] Initializing zero-trust orchestrator session...</div>
-          <div style="color: #94a3b8;">[0.12s] Attestation signature verified: L2 Security Specialist</div>
+          <div style="color: #94a3b8;">[0.12s] Attestation verified: Ajaia IT Manager (Human Signature)</div>
           <div style="color: #94a3b8;">[0.25s] Idempotency preflight check: PASSED (Lock token: ${Math.random().toString(36).substring(2, 9)})</div>
         </div>
       `;
@@ -3247,7 +3207,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
             doneDiv.style.color = "#34d399";
             doneDiv.style.fontWeight = "bold";
             doneDiv.innerHTML = `
-              &#10004; All ${selectedCmds.length} commands successfully executed and recorded to tamper-evident audit store.
+              &#10004; All commands successfully executed. SLA Clock resolved. Automated notification sent to user.
             `;
             consoleEl.appendChild(doneDiv);
             consoleEl.scrollTop = consoleEl.scrollHeight;
@@ -3269,9 +3229,9 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div class="panel-header">
             <div class="panel-title">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-              Incident Chronology &amp; Lifecycle Timeline
+              Ticket Lifecycle Timeline
             </div>
-            <span style="font-size: 11.5px; color: var(--text-muted);">Detection through human sign-off</span>
+            <span style="font-size: 11.5px; color: var(--text-muted);">From intake channel through IT Manager sign-off</span>
           </div>
 
           <div class="timeline">
@@ -3294,7 +3254,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           <div style="margin-top: 24px;">
             <div class="panel-section-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Local Audit Trail (Recorded In-Browser Events)
+              Tamper-Evident Local Audit Trail
             </div>
             <div class="audit-table-wrapper">
               <table class="audit-table">
@@ -3352,7 +3312,7 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
             <strong style="color: #d8b4fe; font-size: 14px;">Inference Parameters &amp; Model Metadata</strong>
-            <span style="font-family: var(--font-mono); font-size: 11px; color: #a855f7;">Deterministic Profile</span>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: #a855f7;">Zero-Data-Retention (ZDR) Enforced</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 11.5px; font-family: var(--font-mono); color: #cbd5e1;">
             <div>Model: <strong>${ai.model}</strong></div>
@@ -3376,13 +3336,13 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         </div>
 
         <div>
-          <h4 style="font-size: 13px; color: #34d399; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Guardrail &amp; Responsible AI Attestation</h4>
+          <h4 style="font-size: 13px; color: #34d399; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Healthcare &amp; Education Guardrail Attestation</h4>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px;">
             <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 10px; border-radius: 4px;">
-              <span style="color: #34d399; font-weight: 700;">✓ Prompt Injection Filter:</span> Passed (No jailbreak vectors)
+              <span style="color: #34d399; font-weight: 700;">✓ HIPAA PHI Scrubber:</span> Verified &bull; Zero patient identifiers sent to external APIs
             </div>
             <div style="background: var(--bg-surface-sunken); border: 1px solid var(--border-subtle); padding: 10px; border-radius: 4px;">
-              <span style="color: #34d399; font-weight: 700;">✓ Presidio PII Scrubber:</span> Attested &bull; Zero plaintext PII in model output
+              <span style="color: #34d399; font-weight: 700;">✓ FERPA Anonymizer:</span> Verified &bull; Student directory data hashed prior to model ingestion
             </div>
           </div>
         </div>
@@ -3392,109 +3352,104 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     }
 
     /* =====================================================================
-       LIVE ATTACK SIMULATOR (Consultant Demonstration)
+       LIVE ATTACK / TELEMETRY SIMULATOR
        ===================================================================== */
     function triggerThreatSimulation() {
-      const simId = "INC-8045";
+      const simId = "TICK-1046";
       if (state.incidents.some(i => i.id === simId)) {
-        showToast("Live simulation threat is already queued in current session.");
+        showToast("Live simulation ticket is already queued in current session.");
         openIncidentDetail(simId);
         return;
       }
 
-      showToast("⚡ Streaming simulated high-priority telemetry payload...");
+      showToast("⚡ Streaming live high-priority telemetry payload...");
 
       const simIncident = {
         id: simId,
-        title: "Anomalous Mass Egress from Production Customer Database",
+        title: "Compliance Alert: Student Behavioral Data Queried via Unsanctioned AI Browser Plugin",
         severity: "P1",
-        category: "Exposed API Credentials",
-        source: "AWS GuardDuty Anomaly Detection",
-        affectedEntity: "rds: prod-postgres-cluster-01 (Role: read-replica-ro)",
+        category: "Education FERPA & Data Privacy",
+        channel: "Telemetry / Security Webhook",
+        source: "Zscaler CASB / Chrome Enterprise Telemetry",
+        affectedEntity: "User: t.wong@ajaia.internal (Senior Developer, EdTech Pod)",
         created: new Date().toISOString(),
         approvalStatus: "Pending Review",
-        description: "GuardDuty detected 24 GB of outbound compressed data egressing to an unknown external server in Frankfurt within a 12-minute window. An unused IAM access key was used to establish the connection.",
+        slaTarget: "Target: 1h Resolve (45m remaining)",
+        slaUrgent: true,
+        routedQueue: "Clinical SecOps & Data Privacy Emergency Queue",
+        description: "CASB detected an unapproved browser extension querying partner university student assessment records and streaming 18 MB of unencrypted student response data to an unknown external server in Frankfurt.",
         cisoImpact: {
-          financialExposure: "$1.2M GDPR regulatory exposure & SEC Material Cyber Breach",
-          secDisclosureTrigger: "Yes &bull; SEC Item 1.05 4-Day Clock Active",
-          regulatorySla: "4 Hours (Urgent Executive Incident Response)",
-          stakeholderAction: "Convene Incident Response Crisis Command and inform General Counsel"
+          financialExposure: "$250,000 university partner contract breach liability",
+          secDisclosureTrigger: "No",
+          regulatorySla: "24 Hours (FERPA Compliance Review)",
+          stakeholderAction: "Immediately push MDM Chrome extension blacklisting policy"
         },
         aiSummary: {
-          model: "Ajaia-SecOps-Triage (v4.2)",
+          model: "Ajaia-IT-Copilot (v4.2)",
           confidence: 97,
-          confidenceRationale: "High confidence due to direct matching egress anomalies with stolen IAM key activity.",
+          confidenceRationale: "High confidence due to direct match against Chrome Enterprise extension inventory and external DLP outbound egress stream.",
           riskLevel: "HIGH RISK",
           factorWeights: {
-            "GuardDuty Telemetry Match": "99%",
-            "Egress Volume Anomaly": "98%",
-            "Identity Compromise Certainty": "96%",
-            "Isolation Feasibility": "99%"
+            "CASB Telemetry Match": "99%",
+            "Egress Data Signature": "98%",
+            "FERPA Violation Certainty": "97%",
+            "Extension Block Feasibility": "100%"
           },
           cotTrace: [
-            "1. Ingested AWS GuardDuty finding Exfiltration:RDS/AnomalousDataExport.",
-            "2. Identified 24.2 GB egress to IP 194.26.29.112 (Frankfurt ASN).",
-            "3. Cross-referenced CloudTrail: IAM user 'svc-reporting-etl' created 14 minutes prior without Jira approval ticket.",
-            "4. Immediate isolation required: Revoke security group egress rules and deactivate access key."
+            "1. Ingested Zscaler CASB alert on user t.wong@ajaia.internal.",
+            "2. Identified 18 MB outbound POST to non-approved endpoint.",
+            "3. Detected student survey responses and university learner IDs.",
+            "4. Immediate containment required: Push MDM block policy for extension ID eojkldfba1239 and revoke active session."
           ],
-          executiveSummary: "Massive anomalous egress from production database detected. Stolen credential actively exfiltrating customer tables. Immediate network isolation and credential neutralization required.",
-          rootCause: "Compromised AWS IAM Access Key generated on an unmonitored reporting account.",
+          executiveSummary: "Unsanctioned browser extension detected streaming university student assessment data to external endpoint. Immediate domain-wide extension block policy required.",
+          rootCause: "Developer installed unauthorized productivity extension on corporate laptop handling educational client data.",
           impactScope: [
-            "Production Database Cluster (rds: prod-postgres-cluster-01)",
-            "GDPR / CCPA Protected Customer Records",
-            "AWS VPC Network Isolation"
+            "University Partner LMS Telemetry",
+            "Chrome Enterprise Fleet (All Managed Laptops)",
+            "Compliance: FERPA (34 CFR Part 99)"
           ],
+          suggestedReply: "Hi Tim, IT Security detected an unauthorized extension 'CodeTurbo' transmitting learner assessment data from your corporate laptop. Because we handle FERPA-regulated university partner data, we have removed this extension domain-wide. Please connect with IT for approved internal AI code assistants.",
           actionPlan: [
-            "Deactivate IAM Access Key AKIAIOSFODNN7EXAMPLE immediately.",
-            "Apply restrictive quarantine Security Group to RDS cluster.",
-            "Terminate all active PostgreSQL connections."
+            "Deploy Jamf/Intune MDM profile blacklisting extension ID eojkldfba1239.",
+            "Terminate active session tokens on developer laptop.",
+            "Export forensic egress payload for university compliance reporting."
           ],
           commands: [
             {
-              id: "cmd-8045-1",
-              label: "Deactivate Compromised IAM Key",
-              cmd: "aws iam update-access-key --access-key-id AKIAIOSFODNN7EXAMPLE --status Inactive",
+              id: "cmd-1046-1",
+              label: "Push Domain-Wide Extension Blacklist via Jamf/Intune",
+              cmd: "jamf-cli policy apply --policy-id 8921 --blacklist-extension \"eojkldfba1239\" --scope all-managed-devices",
               risk: "NEEDS APPROVAL",
               selected: true,
-              description: "Terminates exfiltration channel immediately."
-            },
-            {
-              id: "cmd-8045-2",
-              label: "Quarantine RDS Security Group",
-              cmd: "aws rds modify-db-instance --db-instance-identifier prod-postgres-cluster-01 --vpc-security-group-ids sg-quarantine-isolate --apply-immediately",
-              risk: "HIGH RISK",
-              selected: true,
-              description: "Cuts external network egress while keeping internal diagnostics reachable."
+              description: "Blocks and uninstalls extension from all employee laptops."
             }
           ],
-          rollbackPlan: "Restore original security group sg-rds-production-standard if database connectivity disrupts critical checkout."
+          rollbackPlan: "Whitelist extension if security vetting and vendor DPA is executed."
         },
         evidence: [
           {
-            id: "ev-8045-1",
-            title: "AWS GuardDuty Finding JSON",
-            source: "AWS GuardDuty API",
+            id: "ev-1046-1",
+            title: "Zscaler CASB Alert Finding",
+            source: "Zscaler DLP / Chrome Enterprise",
             timestamp: new Date().toISOString(),
             hash: "sha256:77ff1290bb...",
-            content: `{
-  "Type": "Exfiltration:RDS/AnomalousDataExport",
-  "Severity": 8.5,
-  "Region": "us-east-1",
-  "Resource": "rds: prod-postgres-cluster-01",
-  "EgressVolume": "24.2 GB",
-  "DestinationIP": "194.26.29.112",
-  "IAMUser": "svc-reporting-etl"
-}`
+            content: `CASB POLICY TRIGGER: FERPA_DATA_EXFILTRATION
+User: t.wong@ajaia.internal
+Device: Mac-DEV-042 (Serial: C02G41ABMD6R)
+Extension ID: eojkldfba1239 ("CodeTurbo AI Helper")
+Destination: api.codeturbo-telemetry.io
+Egress Volume: 18.4 MB (Contained Student Assessment Metrics)
+Action: ALERT_HIGH`
           }
         ],
         checklist: [
-          { id: "chk-sim-1", label: "Confirmed outbound egress volume on AWS VPC Flow Logs", checked: true },
-          { id: "chk-sim-2", label: "Verified IAM key owner and lack of approved change window", checked: true },
-          { id: "chk-sim-3", label: "Escalated to CISO & General Counsel for SEC 4-day disclosure assessment", checked: false }
+          { id: "chk-sim-1", label: "Confirmed outbound egress payload on corporate proxy", checked: true },
+          { id: "chk-sim-2", label: "Pushed MDM extension uninstall command to fleet", checked: false },
+          { id: "chk-sim-3", label: "Notified user and university compliance liaison", checked: false }
         ],
         timeline: [
-          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "Live Anomaly Detected", desc: "GuardDuty flagged 24GB egress", actor: "GuardDuty", type: "warning" },
-          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "AI Triage Ingested", desc: "Formulated isolation plan", actor: "AI Bot", type: "ai" }
+          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "Live Anomaly Detected", desc: "Flagged student data egress", actor: "Zscaler CASB", type: "warning" },
+          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "AI Triage Ingested", desc: "Generated MDM blacklist script", actor: "Ajaia IT Bot", type: "ai" }
         ]
       };
 
@@ -3502,16 +3457,16 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       state.auditLog.unshift({
         timestamp: new Date().toISOString(),
         incidentId: simId,
-        actor: "GuardDuty (Live Stream Simulator)",
+        actor: "Zscaler CASB (Live Stream Simulator)",
         action: "TELEMETRY_STREAM_INGESTED",
-        details: "Ingested live P1 breach simulation: 24GB database exfiltration",
+        details: "Ingested live P1 FERPA violation alert: 18MB student data egress",
         notes: "Automated alert priority escalated to P1."
       });
 
       saveState();
       renderApp();
       openIncidentDetail(simId);
-      showToast("🚨 High-Severity Telemetry Stream Ingested: Case INC-8045 opened!");
+      showToast("🚨 High-Priority Compliance Ticket Ingested: Case TICK-1046 opened!");
     }
 
     /* =====================================================================
@@ -3523,42 +3478,50 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       const c = document.getElementById("intakeCategory");
       const s = document.getElementById("intakeSeverity");
       const e = document.getElementById("intakeEntity");
-      const src = document.getElementById("intakeSource");
+      const ch = document.getElementById("intakeChannel");
       const d = document.getElementById("intakeDescription");
       const ev = document.getElementById("intakeEvidence");
 
-      if (val === "preset-creds") {
-        t.value = "Exposed AWS Secret Access Key in Jenkins Build Logs";
-        c.value = "Exposed API Credentials";
-        s.value = "P1";
-        e.value = "AWS IAM: service-account-ci-cd (AKIAIOSFODNN7...)";
-        src.value = "Jenkins Security Audit / Sentry Integration";
-        d.value = "A debug flag left enabled in the Jenkinsfile printed full environment variables including AWS_SECRET_ACCESS_KEY into the public console output.";
-        ev.value = `[BUILD] 2026-10-11 14:10:02 DEBUG: Dumping environment\nAWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\nAWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\nBUILD_URL=https://ci.ajaia.internal/job/portal/149/console`;
-      } else if (val === "preset-share") {
-        t.value = "Public S3 Bucket with Customer Invoices & Statements";
-        c.value = "Broad Sharing Permissions";
+      if (val === "preset-onboarding") {
+        t.value = "Batch Provisioning: Onboard 6 Remote Clinicians (APAC Cohort, HIPAA Training + Okta SSO)";
+        c.value = "Onboarding & Identity (25+ Scaling)";
         s.value = "P2";
-        e.value = "s3://ajaia-billing-invoices-us-east-1";
-        src.value = "AWS GuardDuty S3 Protection";
-        d.value = "S3 bucket policy was edited to allow s3:GetObject for Principal: '*', exposing over 8,400 monthly customer invoice PDF files to the web.";
-        ev.value = `GuardDuty Alert: Policy:S3/PublicAccessGranted\nBucketName: ajaia-billing-invoices-us-east-1\nPrincipal: *\nAction: s3:GetObject\nResource: arn:aws:s3:::ajaia-billing-invoices-us-east-1/*`;
+        e.value = "6 Clinicians across Singapore & Australia (Clinical Ops Team)";
+        ch.value = "Self-Service Employee Portal";
+        d.value = "HR approved batch hire of 6 remote clinical specialists starting Monday. Requires Okta SSO, Box Health HIPAA vault, and Jamf Zero-Touch MacBook dispatch.";
+        ev.value = `[HRIS BAMBOOHR] Cohort: APAC-Clin-Q4\nCount: 6 Hires\nHardware: MacBook Air 15" (Jamf Enrolled)\nRequired Apps: Okta, Box Health (BAA), Slack, Zoom`;
       } else if (val === "preset-ai") {
-        t.value = "Unsanctioned AI Code Assistant Browser Plugin with Telemetry";
-        c.value = "Unapproved AI Integrations";
+        t.value = "Request: Claude 3.5 Sonnet & GPT-4o Enterprise API Keys for NLP Research";
+        c.value = "AI Systems & LLM Operations";
         s.value = "P2";
-        e.value = "User: t.wong@ajaia.internal (Senior Developer)";
-        src.value = "Zscaler CASB / Chrome Enterprise Telemetry";
-        d.value = "Developer installed 'CodeTurbo AI' browser extension which sent 42 MB of proprietary frontend source code snippets to unknown third-party endpoints.";
-        ev.value = `Zscaler DLP: Outbound POST to https://telemetry.codeturbo-extension.dev/v2/context\nPayload size: 42.4 MB (Source files: CheckoutModal.tsx, StripeIntegration.ts)\nRisk: Unapproved AI Vendor / IP Egress`;
-      } else if (val === "preset-onboarding") {
-        t.value = "Terminated Contractor Retaining Active Slack & Confluence SSO";
-        c.value = "Onboarding Gaps";
+        e.value = "Dr. Elena Rostova (Lead Clinical NLP Researcher)";
+        ch.value = "Slack Bot (#it-helpdesk)";
+        d.value = "Requesting API credentials for foundation model benchmark on de-identified clinical trial summaries. Monthly budget: $3,500 under CLIN-AI-409.";
+        ev.value = `@Ajaia-IT-Bot: "Elena Rostova requested: Elevated Claude 3.5 Sonnet API key with HIPAA Zero-Data-Retention for Clinical Trials Phase II summarization."`;
+      } else if (val === "preset-hipaa") {
+        t.value = "Urgent: Unencrypted Healthcare Patient Records Exported to Shared Drive";
+        c.value = "Healthcare PHI & HIPAA";
+        s.value = "P1";
+        e.value = "Google Drive: 'Partner_Hospital_Cohort_Sept.xlsx'";
+        ch.value = "Telemetry / Security Webhook";
+        d.value = "DLP sensor flagged 312 patient records shared via public link. Immediate ACL revocation and download forensic audit required.";
+        ev.value = `DLP TRIGGER: HIPAA_PHI_PATIENT_RECORDS\nMatches: 312 MRNs, Patient Full Names, Prescriptions\nActive ACL: anyoneWithLink (Role: Viewer)`;
+      } else if (val === "preset-ferpa") {
+        t.value = "Education LMS Analytics Integration Review (Canvas API / FERPA Compliance)";
+        c.value = "Education FERPA & Data Privacy";
         s.value = "P3";
-        e.value = "Identity: maria.gonzalez@contractor.ajaia.internal";
-        src.value = "HRIS (BambooHR) vs Okta SCIM Reconciliation";
-        d.value = "Contractor assignment was concluded 12 days ago, but Okta identity was never flagged inactive due to missing termination ticket in Jira.";
-        ev.value = `Reconciliation Scan Mismatch:\nUser: maria.gonzalez@contractor.ajaia.internal\nHRIS State: Terminated (2026-09-29)\nOkta State: Active\nAssigned Apps: Slack, Atlassian Confluence, Jira`;
+        e.value = "Partner University LMS (Metro State Univ) & EdTech Pod";
+        ch.value = "Employee Self-Service Portal";
+        d.value = "Product squad requesting Canvas API OAuth token approval to ingest student performance records. Requires student PII hashing proxy.";
+        ev.value = `LMS OAUTH REQUEST: Canvas API Integration\nScopes: course_analytics, student_submissions\nCompliance: FERPA Directory Information Gate Required`;
+      } else if (val === "preset-creds") {
+        t.value = "Security Alert: Exposed AWS Secret Access Key in Jenkins Logs";
+        c.value = "Security & Cloud Operations";
+        s.value = "P1";
+        e.value = "AWS IAM: service-account-ci-cd";
+        ch.value = "Telemetry / Security Webhook";
+        d.value = "A debug flag left enabled in the Jenkinsfile printed AWS_SECRET_ACCESS_KEY into the public console output.";
+        ev.value = `[BUILD] 2026-10-11 DEBUG: Dumping environment\nAWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\nAWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`;
       }
     }
 
@@ -3566,17 +3529,17 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       const title = document.getElementById("intakeTitle").value.trim();
       const category = document.getElementById("intakeCategory").value;
       const severity = document.getElementById("intakeSeverity").value;
+      const channel = document.getElementById("intakeChannel").value;
       const entity = document.getElementById("intakeEntity").value.trim();
-      const source = document.getElementById("intakeSource").value.trim();
       const desc = document.getElementById("intakeDescription").value.trim();
       const rawEvidence = document.getElementById("intakeEvidence").value.trim();
 
-      if (!title || !entity || !source || !desc) {
-        alert("Please complete Title, Entity, Source, and Description.");
+      if (!title || !entity || !desc) {
+        alert("Please complete Title, Entity, and Description.");
         return;
       }
 
-      const newId = "INC-" + (8040 + state.incidents.length + 1);
+      const newId = "TICK-" + (1040 + state.incidents.length + 1);
       const timestamp = new Date().toISOString();
 
       const newIncident = {
@@ -3584,67 +3547,64 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
         title,
         severity,
         category,
-        source,
+        channel,
+        source: channel,
         affectedEntity: entity,
         created: timestamp,
         approvalStatus: "Pending Review",
+        slaTarget: severity === "P1" ? "Target: 1h Resolve (58m remaining)" : (severity === "P2" ? "Target: 4h Resolve" : "Target: 24h Resolve"),
+        slaUrgent: severity === "P1",
+        routedQueue: category.includes("HIPAA") ? "Clinical SecOps & HIPAA Queue" : (category.includes("Onboarding") ? "IT Identity & Remote MDM Queue" : "IT Helpdesk Queue"),
         description: desc,
         cisoImpact: {
           financialExposure: "TBD upon preliminary forensic containment",
           secDisclosureTrigger: "Pending Legal Review",
-          regulatorySla: severity === "P1" ? "4 Hours" : "24 Hours",
-          stakeholderAction: "Review compliance boundary"
+          regulatorySla: severity === "P1" ? "1 Hour" : "24 Hours",
+          stakeholderAction: "Review compliance boundary and user authorization"
         },
         aiSummary: {
-          model: "Ajaia-SecOps-Triage (v4.2)",
+          model: "Ajaia-IT-Copilot (v4.2)",
           confidence: 93,
           confidenceRationale: "Synthesized based on incident symptoms and matching historical organizational threat playbooks.",
           riskLevel: severity === "P1" ? "HIGH RISK" : (severity === "P2" ? "NEEDS APPROVAL" : "SAFE"),
           factorWeights: {
             "Pattern Match Determinism": "94%",
             "Symptom Correlation": "92%",
-            "Blast Radius Certainty": "90%",
+            "Compliance Certainty": "95%",
             "Rollback Feasibility": "96%"
           },
           cotTrace: [
-            `1. Ingested incident symptoms: ${desc}`,
-            `2. Correlated target asset '${entity}' against organization perimeter.`,
-            `3. Evaluated severity level: ${severity}.`,
-            `4. Formulated actionable mitigation commands.`
+            `1. Ingested ticket via ${channel}: ${title}`,
+            `2. Evaluated affected entity '${entity}' against organization perimeter.`,
+            `3. Assigned priority: ${severity}.`,
+            `4. Formulated actionable mitigation script and user reply.`
           ],
           executiveSummary: `Synthetic intake event: ${desc} Immediate isolation and human validation required.`,
-          rootCause: `Operational or configuration oversight involving ${entity}.`,
-          impactScope: [entity, "Governance Policy Scope", "SOC2 Controls"],
+          rootCause: `Operational or configuration request involving ${entity}.`,
+          impactScope: [entity, "Governance Policy Scope", "Ajaia IT Perimeter"],
+          suggestedReply: `Hi, Ajaia IT Support has received your ticket regarding '${title}'. Our AI copilot has pre-staged the necessary access and configuration scripts. An IT Manager is completing final attestation.`,
           actionPlan: [
             `Audit active session connections and access logs for ${entity}.`,
-            `Revoke anomalous permissions and enforce least-privilege baseline.`,
-            `Notify stakeholders and log compliance non-conformance.`
+            `Execute requested provisioning or mitigation policy.`,
+            `Dispatch confirmation response to requester.`
           ],
           commands: [
             {
               id: `cmd-${newId}-1`,
-              label: "Audit Target Access Logs",
-              cmd: `# Inspect current authorization bindings\nsecurity-cli audit inspect --target "${entity}" --format json`,
-              risk: "SAFE",
+              label: "Execute Scoped Configuration Script",
+              cmd: `# Execute configuration for ${entity}\najaia-it-cli apply --target "${entity}" --policy-baseline standard`,
+              risk: severity === "P1" ? "HIGH RISK" : "NEEDS APPROVAL",
               selected: true,
-              description: "Read-only audit inspection."
-            },
-            {
-              id: `cmd-${newId}-2`,
-              label: "Enforce Access Isolation & Revocation",
-              cmd: `# Revoke compromised access grant\nsecurity-cli access revoke --target "${entity}" --enforce-immediate`,
-              risk: "NEEDS APPROVAL",
-              selected: true,
-              description: "Applies immediate mitigation policy."
+              description: "Applies requested configuration changes."
             }
           ],
-          rollbackPlan: "Re-grant original policy bindings if access revocation causes operational downtime."
+          rollbackPlan: "Revert configuration changes if operational friction occurs."
         },
         evidence: rawEvidence ? [
           {
             id: `ev-${newId}-1`,
-            title: "Ingested Telemetry Log",
-            source,
+            title: "Ingested Channel Payload",
+            source: channel,
             timestamp,
             hash: "sha256:" + Math.random().toString(36).substring(2, 18),
             content: rawEvidence
@@ -3656,8 +3616,8 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
           { id: `chk-${newId}-3`, label: "Remediation plan reviewed for operational stability", checked: false }
         ],
         timeline: [
-          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "Incident Ingested", desc: `Created via local intake: ${title}`, actor: "Security Analyst", type: "system" },
-          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "AI Triage Completed", desc: "Synthesized 93% confidence assessment", actor: "Ajaia Triage Bot", type: "ai" }
+          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "Ticket Submitted", desc: `Received via ${channel}: ${title}`, actor: "Requester", type: "system" },
+          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), title: "AI Triage Completed", desc: "Synthesized 93% confidence assessment", actor: "Ajaia IT Bot", type: "ai" }
         ]
       };
 
@@ -3665,9 +3625,9 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
       state.auditLog.unshift({
         timestamp,
         incidentId: newId,
-        actor: "Security Analyst (Local Intake)",
+        actor: "Requester (Intake)",
         action: "TICKET_CREATED",
-        details: `Created synthetic ticket ${newId} (${title})`,
+        details: `Created ticket ${newId} (${title}) via ${channel}`,
         notes: `Category: ${category}, Severity: ${severity}`
       });
 
@@ -3680,34 +3640,42 @@ TOTAL_POST_TERMINATION_LOGINS: 14 (between Oct 5 and Oct 10)`
     function exportDataPackage() {
       const exportPayload = {
         exportMetadata: {
-          system: "Enterprise HITL Incident Triage Operations Center",
-          evaluationContext: "Ajaia IT Manager & AI Consultant Assessment",
-          author: "Bikram Sarkar",
+          system: "Ajaia AI-Native IT Operations & Ticketing Hub",
+          evaluationContext: "AI-Native IT Manager Assessment — Systems, Security & Compliance Design",
+          candidate: "Bikram Sarkar",
           exportedAt: new Date().toISOString(),
           disclaimer: "SYNTHETIC DEMO DATA ONLY. No live credentials, infrastructure actions, or confidential client records included.",
-          totalIncidents: state.incidents.length,
+          totalTickets: state.incidents.length,
           totalAuditEvents: state.auditLog.length
         },
-        executiveMetrics: {
-          meanTimeToTriageReduction: "84.2%",
-          hitlAttestationCompliance: "100%",
-          simulatedExposurePrevented: "$1.42M"
+        itTicketingArchitecture: {
+          intakeChannels: ["Slack Bot (#it-helpdesk)", "Self-Service Web Portal", "Email (support@ajaia.io)", "Telemetry Webhooks (GuardDuty, DLP, HRIS)"],
+          slaStructure: {
+            "P1 Critical": { response: "< 15 mins", resolution: "< 1 hour", escalation: "Immediate PagerDuty / SMS" },
+            "P2 High": { response: "< 1 hour", resolution: "< 4 hours", escalation: "2 hours" },
+            "P3 Medium": { response: "< 4 hours", resolution: "< 24 hours", escalation: "12 hours" },
+            "P4 Low": { response: "< 8 hours", resolution: "< 72 hours", escalation: "48 hours" }
+          },
+          routingRules: [
+            "Tier 0 AI Auto-Resolve (41.8% Deflection): Password resets, approved software catalog, FAQ",
+            "Clinical SecOps Queue: All tickets containing HIPAA PHI or medical data",
+            "Identity & Remote MDM Queue: Batch onboarding (25+ scaling) across US, EMEA, APAC",
+            "AI Platform Engineering: Enterprise LLM access, API keys, rate-limit adjustments",
+            "IT Compliance Queue: Education FERPA reviews, university partner data sharing"
+          ],
+          aiWorkloadReduction: {
+            autoDeflectionRate: "41.8%",
+            copilotAssistance: "Pre-drafted employee replies + pre-staged CLI scripts",
+            humanInTheLoopAttestation: "100% human-gated before production execution"
+          }
         },
-        incidents: state.incidents,
-        auditTrail: state.auditLog,
-        productionBlueprint: [
-          "1. Identity & RBAC: Multi-party authorization with OIDC/SAML2",
-          "2. Durable Audit Vault: S3 Glacier Object Lock WORM storage",
-          "3. Privacy Redaction: Regex and NER PII scrubbing prior to model inference",
-          "4. Least-Privilege Connectors: Granular cloud provider and IdP permissions",
-          "5. Idempotent Execution: Pre-flight dry-runs and automated circuit-breaker rollbacks",
-          "6. Model Red-Teaming: Continuous guardrail evaluation for adversarial prompt injection"
-        ]
+        tickets: state.incidents,
+        auditTrail: state.auditLog
       };
 
       const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
       const downloadAnchor = document.createElement("a");
-      const filename = `hitl-executive-briefing-export-${new Date().toISOString().slice(0, 10)}.json`;
+      const filename = `ajaia-it-ticketing-briefing-${new Date().toISOString().slice(0, 10)}.json`;
       downloadAnchor.setAttribute("href", jsonStr);
       downloadAnchor.setAttribute("download", filename);
       document.body.appendChild(downloadAnchor);
